@@ -1,15 +1,14 @@
 package kr.co.space.diary.entity.member;
 
 import kr.co.space.diary.entity.Base;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import kr.co.space.diary.enums.member.MemberRoleType;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Member extends Base {
 
     private String id;
@@ -17,6 +16,6 @@ public class Member extends Base {
     private String password;
     private String name;
     private String nickname;
-    private String role;
+    private MemberRoleType role;
 
 }
