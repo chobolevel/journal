@@ -1,5 +1,23 @@
-<html lang="ko">
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="headerFragment">
     <h1>HEADER</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="/">홈</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="/member/sign/in">로그인</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="/member/sign/up">회원가입</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a href="/member/profile">
+                    <p sec:authentication="principal.member.name"></p>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 </html>
