@@ -53,7 +53,7 @@
     <insert id="create" parameterType="Member">
         INSERT INTO
         member (id, username, password, name, nickname, role)
-        VALUES (${id}, #{username}, #{password}, #{name}, #{nickname}, #{role})
+        VALUES (#{id}, #{username}, #{password}, #{name}, #{nickname}, #{role})
     </insert>
 
     <update id="modify" parameterType="Member">
