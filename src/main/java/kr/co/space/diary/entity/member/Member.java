@@ -17,5 +17,6 @@ public class Member extends Base {
     private String name;
     private String nickname;
     private MemberRoleType role;
+    private String activateYn;
 
 }
