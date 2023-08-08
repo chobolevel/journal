@@ -62,10 +62,11 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  public void remove(Member member) throws CustomException {
+  public void resign(Member member) throws CustomException {
     if(member.getId() == null || member.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
     }
-    memberMapper.remove(member);
+    member.setActivateYn("y");
+    memberMapper.modify(member);
   }
 }
