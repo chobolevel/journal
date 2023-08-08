@@ -74,6 +74,9 @@
         <if test="role != null and role != ''">
             , role = #{role}
         </if>
+        <if test="activateYn != null and activateYn != ''">
+            , activate_yn = #{activateYn}
+        </if>
         WHERE id = #{id}
     </update>
 
