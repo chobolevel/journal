@@ -8,7 +8,23 @@
 <body>
 
 <section layout:fragment="content">
-    SIGN UP
+    <h2>회원가입</h2>
+    <form action="/member/sign/up" method="post">
+        <div>
+            <input name="username" placeholder="아이디" type="text">
+        </div>
+        <div>
+            <input name="password" placeholder="비밀번호" type="password">
+        </div>
+        <div>
+            <input name="name" placeholder="이름" type="text">
+        </div>
+        <div>
+            <input name="nickname" placeholder="닉네임" type="text">
+        </div>
+        <button>회원가입</button>
+        <button>취소</button>
+    </form>
 </section>
 
 </body>

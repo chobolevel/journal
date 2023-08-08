@@ -8,7 +8,17 @@
 <body>
 
 <section layout:fragment="content">
-    SIGN IN
+    <h2>로그인</h2>
+    <form action="/member/sign/in" method="post">
+        <div>
+            <input name="username" placeholder="아이디" type="text">
+        </div>
+        <div>
+            <input name="password" placeholder="비밀번호" type="password">
+        </div>
+        <button>로그인</button>
+        <button>취소</button>
+    </form>
 </section>
 
 </body>
