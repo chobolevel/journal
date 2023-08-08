@@ -47,7 +47,7 @@
     <insert id="create" parameterType="Diary">
         INSERT INTO
         diary (id, title, content, writer)
-        VALUES (#{id], #{title}, #{content}, #{writer})
+        VALUES (#{id}, #{title}, #{content}, #{writer})
     </insert>
 
     <update id="modify" parameterType="Diary">
