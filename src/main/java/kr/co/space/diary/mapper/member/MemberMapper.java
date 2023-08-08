@@ -16,6 +16,4 @@ public interface MemberMapper {
 
   void modify(Member member);
 
-  void remove(Member member);
-
 }

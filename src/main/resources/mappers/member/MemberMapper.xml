@@ -77,8 +77,4 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="remove" parameterType="Member">
-        DELETE FROM member WHERE id =  #{id}
-    </delete>
-
 </mapper>
