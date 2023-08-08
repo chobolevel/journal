@@ -44,6 +44,9 @@
             <if test="id != null and id != ''">
                 id = #{id}
             </if>
+            <if test="username != null and username != ''">
+                username = #{username}
+            </if>
         </where>
     </select>
 
