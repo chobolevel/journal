@@ -1,6 +1,5 @@
 package kr.co.space.diary.config.security.config;
 
-import kr.co.space.diary.enums.member.MemberRoleType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .csrf().disable()
         .authorizeRequests()
-        .antMatchers("/diary/**").hasAuthority(MemberRoleType.ROLE_USER.getCode())
+        .antMatchers("/diary/**").authenticated()
         .antMatchers("/member/sign/up", "/member/sign/in").anonymous()
         .anyRequest().permitAll()
       .and()
