@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko"
+      layout:decorate="~{layout/default_layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>나만의 일기 - 일기</title>
+    <script th:inline="javascript">
+        const member = [[${member}]]
+        const diary = [[${diary}]]
+
+        console.log(member)
+        console.log(diary)
+    </script>
+</head>
+<body>
+
+<section layout:fragment="content">
+    각 일기 확인 페이지
+    <p th:text="${diary.title}"></p>
+</section>
+
+</body>
+</html>
