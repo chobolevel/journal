@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class DiaryServiceImpl implements DiaryService{
     else if(diary.getWriter() == null || diary.getWriter().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "writer");
     }
+    diary.setId(UUID.randomUUID().toString());
     diaryMapper.create(diary);
   }
 
