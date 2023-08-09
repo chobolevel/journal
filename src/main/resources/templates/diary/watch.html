@@ -8,8 +8,13 @@
         const member = [[${member}]]
         const diary = [[${diary}]]
 
-        console.log(member)
-        console.log(diary)
+        const memberId = member.id
+        const diaryWriterId = diary.writer.id
+
+        if(memberId !== diaryWriterId) {
+            alert('작성자만 확인할 수 있는 글입니다.')
+            location.href = '/diary'
+        }
     </script>
 </head>
 <body>
