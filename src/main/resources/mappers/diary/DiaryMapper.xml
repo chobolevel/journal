@@ -27,6 +27,9 @@
             <property name="prefix" value=""/>
         </include>
         FROM diary
+        <where>
+            writer = #{writer}
+        </where>
     </select>
 
 
