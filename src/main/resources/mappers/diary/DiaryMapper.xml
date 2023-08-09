@@ -12,7 +12,7 @@
     </resultMap>
 
     <resultMap id="RelatedResultMap" type="Diary" extends="BaseResultMap">
-        <association property="writer" javaType="Member"/>
+        <association property="writer" javaType="Member" columnPrefix="m_" resultMap="kr.co.space.diary.mapper.member.MemberMapper.BaseResultMap"/>
     </resultMap>
 
     <sql id="columns">
@@ -24,29 +24,43 @@
         , ${alias}update_date AS ${prefix}update_date
     </sql>
 
-    <select id="findAll" parameterType="Diary" resultMap="BaseResultMap">
+    <select id="findAll" parameterType="Diary" resultMap="RelatedResultMap">
         SELECT
         <include refid="columns">
-            <property name="alias" value=""/>
+            <property name="alias" value="d."/>
             <property name="prefix" value=""/>
         </include>
-        FROM diary
+        ,
+        <include refid="kr.co.space.diary.mapper.member.MemberMapper.columns">
+            <property name="alias" value="m."/>
+            <property name="prefix" value="m_"/>
+        </include>
+        FROM diary AS d
+        LEFT OUTER JOIN member AS m
+            ON d.writer_id = m.id
         <where>
-            writer_id = #{writerId}
+            d.writer_id = #{writerId}
         </where>
     </select>
 
 
-    <select id="findOne" parameterType="Diary" resultMap="BaseResultMap">
+    <select id="findOne" parameterType="Diary" resultMap="RelatedResultMap">
         SELECT
         <include refid="columns">
-            <property name="alias" value=""/>
+            <property name="alias" value="d."/>
             <property name="prefix" value=""/>
         </include>
-        FROM diary
+        ,
+        <include refid="kr.co.space.diary.mapper.member.MemberMapper.columns">
+            <property name="alias" value="m."/>
+            <property name="prefix" value="m_"/>
+        </include>
+        FROM diary AS d
+        LEFT OUTER JOIN member AS m
+            ON d.writer_id = m.id
         <where>
             <if test="id != null and id != ''">
-                id = #{id}
+                d.id = #{id}
             </if>
         </where>
     </select>
