@@ -38,7 +38,7 @@ public class DiaryServiceImpl implements DiaryService{
     else if(diary.getContent() == null || diary.getContent().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "content");
     }
-    else if(diary.getWriter() == null || diary.getWriter().isEmpty()) {
+    else if(diary.getWriterId() == null || diary.getWriterId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "writer");
     }
     diary.setId(UUID.randomUUID().toString());

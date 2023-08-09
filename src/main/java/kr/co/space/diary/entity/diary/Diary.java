@@ -13,6 +13,6 @@ public class Diary extends Base {
     private String id;
     private String title;
     private String content;
-    private String writer;
+    private String writerId;
 
 }

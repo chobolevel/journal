@@ -37,7 +37,7 @@ public class DiaryController {
 
   @GetMapping("")
   public String list(@AuthenticationPrincipal PrincipalDetails principalDetails,  Model model) {
-    List<Diary> diaryList = diaryService.findAll(Diary.builder().writer(principalDetails.getMember().getId()).build());
+    List<Diary> diaryList = diaryService.findAll(Diary.builder().writerId(principalDetails.getMember().getId()).build());
     model.addAttribute("list", diaryList);
     return "/diary/list";
   }
