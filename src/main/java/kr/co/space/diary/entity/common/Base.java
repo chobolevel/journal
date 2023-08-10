@@ -1,4 +1,4 @@
-package kr.co.space.diary.entity;
+package kr.co.space.diary.entity.common;
 
 import lombok.Getter;
 import lombok.Setter;
