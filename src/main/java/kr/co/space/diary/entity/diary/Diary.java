@@ -1,6 +1,6 @@
 package kr.co.space.diary.entity.diary;
 
-import kr.co.space.diary.entity.Base;
+import kr.co.space.diary.entity.common.Base;
 import kr.co.space.diary.entity.member.Member;
 import lombok.*;
 
