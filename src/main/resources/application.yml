@@ -1,13 +1,18 @@
 # server config
 server:
   port: 8080
-# datasource config
 spring:
+  # datasource config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
     url: jdbc:mysql://localhost:3306/diary
+  # form input method
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 # mybatis config
 mybatis:
   type-aliases-package: kr.co.space.diary.entity
