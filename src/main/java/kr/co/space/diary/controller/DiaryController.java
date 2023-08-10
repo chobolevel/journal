@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class DiaryController {
   public String write(Diary diary) throws CustomException {
     diaryService.create(diary);
     // 추후 페이징 완료되면 글 목록으로 이동 처리
-    return "redirect:/";
+    return "redirect:/diary";
   }
 
   @GetMapping("")
@@ -48,6 +45,26 @@ public class DiaryController {
     model.addAttribute("member", principalDetails.getMember());
     model.addAttribute("diary", findDiary);
     return "/diary/watch";
+  }
+
+  @GetMapping("modify/{id}")
+  public String modify(@PathVariable("id") String id, Model model) throws CustomException {
+    Diary findDiary = diaryService.findOne(Diary.builder().id(id).build());
+    model.addAttribute("diary", findDiary);
+    return "/diary/modify";
+  }
+
+  @PutMapping("modify/{id}")
+  public String modify(@PathVariable("id") String id, Diary diary) throws CustomException {
+    diary.setId(id);
+    diaryService.modify(diary);
+    return "redirect:/diary";
+  }
+
+  @DeleteMapping("remove/{id}")
+  public String remove(@PathVariable("id") String id) throws CustomException {
+    diaryService.remove(Diary.builder().id(id).build());
+    return "redirect:/diary";
   }
 
 }

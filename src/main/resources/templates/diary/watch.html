@@ -4,25 +4,39 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <title>나만의 일기 - 일기</title>
-    <script th:inline="javascript">
-        const member = [[${member}]]
-        const diary = [[${diary}]]
-
-        const memberId = member.id
-        const diaryWriterId = diary.writer.id
-
-        if(memberId !== diaryWriterId) {
-            alert('작성자만 확인할 수 있는 글입니다.')
-            location.href = '/diary'
-        }
-    </script>
 </head>
 <body>
 
 <section layout:fragment="content">
-    각 일기 확인 페이지
-    <p th:text="${diary.title}"></p>
+    <h2 th:text="${diary.title}"></h2>
+    <p th:text="${diary.content}"></p>
+    <button class="modify-btn">수정하기</button>
+    <button class="remove-btn">삭제하기</button>
 </section>
 
 </body>
 </html>
+
+<script th:inline="javascript">
+    const member = [[${member}]]
+    const diary = [[${diary}]]
+    const modifyBtn = document.querySelector('.modify-btn')
+    const removeBtn = document.querySelector('.remove-btn')
+
+    modifyBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        location.href = `/diary/modify/${diary.id}`
+    })
+    // form 만들고 전송하는 코드
+    removeBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        if(confirm('정말 삭제하시겠습니까?')) {
+            const form = document.createElement('form')
+            form.action = `/diary/remove/${diary.id}`
+            form.method = 'post'
+            form.innerHTML = "<input type='hidden' name='_method' value='DELETE'>"
+            document.body.append(form)
+            form.submit()
+        }
+    })
+</script>

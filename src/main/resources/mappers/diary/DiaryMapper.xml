@@ -82,10 +82,7 @@
         <if test="content != null and content != ''">
             , content = #{content}
         </if>
-        <if test="writerId != null and writerId != ''">
-            , writer_id = #{writerId}
-        </if>
-        WHERE id = ${id}
+        WHERE id = #{id}
     </update>
 
     <delete id="remove" parameterType="Diary">

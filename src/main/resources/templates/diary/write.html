@@ -9,8 +9,8 @@
 
 <section layout:fragment="content">
     <h2>일기를 작성하세요</h2>
-    <form action="/diary/write" method="post">
-        <input name="writer.id" th:value="${member.id}" type="hidden">
+    <form method="post" th:action="@{/diary/write}">
+        <input name="writerId" th:value="${member.id}" type="hidden">
         <div>
             <input name="title" placeholder="제목" type="text">
         </div>

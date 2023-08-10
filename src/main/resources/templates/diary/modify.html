@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko"
+      layout:decorate="~{layout/default_layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>나만의 일기 - 일기 수정</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+    <h2>일기 내용을 수정하세요.</h2>
+    <form th:action="@{/diary/modify/{id}(id=${diary.id})}" th:method="put">
+        <div>
+            <input name="title" placeholder="제목" th:value="${diary.title}" type="text">
+        </div>
+        <div>
+            <textarea name="content" placeholder="내용을 입력하세요.." th:text="${diary.content}" th:value="${diary.content}"></textarea>
+        </div>
+        <button>저장하기</button>
+    </form>
+</section>
+
+</body>
+</html>

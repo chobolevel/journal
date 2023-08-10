@@ -9,6 +9,7 @@
 
 <section layout:fragment="content">
     <h2>일기 목록</h2>
+    <button class="write-btn">글 쓰기</button>
     <table>
         <tr>
             <th>번호</th>
@@ -31,3 +32,12 @@
 
 </body>
 </html>
+
+<script th:inline="javascript">
+    const writeBtn = document.querySelector('.write-btn')
+
+    writeBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        location.href = '/diary/write'
+    })
+</script>
