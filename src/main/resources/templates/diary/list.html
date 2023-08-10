@@ -28,6 +28,19 @@
             </td>
         </tr>
     </table>
+    <div>
+        <ul>
+            <li th:if="${paging.prev}">
+                <a href="#">prev</a>
+            </li>
+            <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+                <a th:href="@{/diary(pageNum=${num}, limit=${paging.cri.limit})}" th:text="${num}"></a>
+            </li>
+            <li th:if="${paging.next}">
+                <a href="#">next</a>
+            </li>
+        </ul>
+    </div>
 </section>
 
 </body>
@@ -35,6 +48,7 @@
 
 <script th:inline="javascript">
     const writeBtn = document.querySelector('.write-btn')
+    console.log([[${paging}]])
 
     writeBtn.addEventListener('click', (e) => {
         e.preventDefault()

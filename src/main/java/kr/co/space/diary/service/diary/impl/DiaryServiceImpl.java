@@ -1,5 +1,6 @@
 package kr.co.space.diary.service.diary.impl;
 
+import kr.co.space.diary.entity.common.Criteria;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.enums.common.CustomExceptionType;
 import kr.co.space.diary.exception.CustomException;
@@ -18,8 +19,13 @@ public class DiaryServiceImpl implements DiaryService{
   private final DiaryMapper diaryMapper;
 
   @Override
-  public List<Diary> findAll(Diary diary) {
-    return diaryMapper.findAll(diary);
+  public int findCount() {
+    return diaryMapper.findCount();
+  }
+
+  @Override
+  public List<Diary> findAll(Diary diary, Criteria cri) {
+    return diaryMapper.findAll(diary, cri);
   }
 
   @Override

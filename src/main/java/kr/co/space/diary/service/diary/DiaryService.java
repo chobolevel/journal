@@ -1,5 +1,6 @@
 package kr.co.space.diary.service.diary;
 
+import kr.co.space.diary.entity.common.Criteria;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.exception.CustomException;
 
@@ -7,7 +8,9 @@ import java.util.List;
 
 public interface DiaryService {
 
-  List<Diary> findAll(Diary diary);
+  int findCount();
+
+  List<Diary> findAll(Diary diary, Criteria cri);
 
   Diary findOne(Diary diary) throws CustomException;
 

@@ -1,6 +1,8 @@
 package kr.co.space.diary.controller;
 
 import kr.co.space.diary.config.security.principal.PrincipalDetails;
+import kr.co.space.diary.entity.common.Criteria;
+import kr.co.space.diary.entity.common.Paging;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.exception.CustomException;
 import kr.co.space.diary.service.diary.DiaryService;
@@ -33,9 +35,10 @@ public class DiaryController {
   }
 
   @GetMapping("")
-  public String list(@AuthenticationPrincipal PrincipalDetails principalDetails,  Model model) {
-    List<Diary> diaryList = diaryService.findAll(Diary.builder().writerId(principalDetails.getMember().getId()).build());
+  public String list(@AuthenticationPrincipal PrincipalDetails principalDetails, Criteria cri, Model model) {
+    List<Diary> diaryList = diaryService.findAll(Diary.builder().writerId(principalDetails.getMember().getId()).build(), cri);
     model.addAttribute("list", diaryList);
+    model.addAttribute("paging", new Paging(cri, diaryService.findCount()));
     return "/diary/list";
   }
 

@@ -26,6 +26,10 @@
         , ${alias}update_date AS ${prefix}update_date
     </sql>
 
+    <select id="findCount" resultType="int">
+        SELECT COUNT(*) FROM diary
+    </select>
+
     <select id="findAll" parameterType="Diary" resultMap="RelatedResultMap">
         SELECT
         <include refid="columns">
@@ -41,8 +45,10 @@
         LEFT OUTER JOIN member AS m
             ON d.writer_id = m.id
         <where>
-            d.writer_id = #{writerId}
+            d.writer_id = #{diary.writerId}
         </where>
+        ORDER BY d.create_date DESC
+        LIMIT #{cri.limit} OFFSET #{cri.offset}
     </select>
 
 
