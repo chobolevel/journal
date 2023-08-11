@@ -13,7 +13,15 @@
     </resultMap>
 
     <resultMap id="RelatedResultMap" type="Diary" extends="BaseResultMap">
-        <association property="writer" javaType="Member" columnPrefix="m_" resultMap="kr.co.space.diary.mapper.member.MemberMapper.BaseResultMap"/>
+        <association property="writer"
+                     javaType="Member"
+                     columnPrefix="m_"
+                     resultMap="kr.co.space.diary.mapper.member.MemberMapper.BaseResultMap"/>
+        <collection property="attachmentList"
+                    javaType="List"
+                    ofType="Attachment"
+                    columnPrefix="a_"
+                    resultMap="kr.co.space.diary.mapper.attachment.AttachmentMapper.BaseResultMap"/>
     </resultMap>
 
     <sql id="columns">
@@ -63,9 +71,16 @@
             <property name="alias" value="m."/>
             <property name="prefix" value="m_"/>
         </include>
+        ,
+        <include refid="kr.co.space.diary.mapper.attachment.AttachmentMapper.columns">
+            <property name="alias" value="a."/>
+            <property name="prefix" value="a_"/>
+        </include>
         FROM diary AS d
-        LEFT OUTER JOIN member AS m
+        LEFT JOIN member AS m
             ON d.writer_id = m.id
+        LEFT JOIN attachment AS a
+            ON d.id = a.diary_id
         <where>
             <if test="id != null and id != ''">
                 d.id = #{id}

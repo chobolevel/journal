@@ -20,8 +20,8 @@
         INSERT INTO
         attachment (diary_id, file_name)
         VALUES
-        <foreach collection="attachmentList" item="attachment" open="(" separator=", " close=")">
-            #{attachment.diaryId}, #{attachment.fileName}
+        <foreach collection="attachmentList" item="attachment" separator=", ">
+            (#{attachment.diaryId}, #{attachment.fileName})
         </foreach>
     </insert>
 
