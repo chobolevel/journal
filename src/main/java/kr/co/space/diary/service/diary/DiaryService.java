@@ -14,7 +14,7 @@ public interface DiaryService {
 
   Diary findOne(Diary diary) throws CustomException;
 
-  void create(Diary diary) throws CustomException;
+  String create(Diary diary) throws CustomException;
 
   void modify(Diary diary) throws CustomException;
 

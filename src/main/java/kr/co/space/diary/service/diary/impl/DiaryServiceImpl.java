@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DiaryServiceImpl implements DiaryService{
+public class DiaryServiceImpl implements DiaryService {
 
   private final DiaryMapper diaryMapper;
 
@@ -39,7 +39,7 @@ public class DiaryServiceImpl implements DiaryService{
   }
 
   @Override
-  public void create(Diary diary) throws CustomException {
+  public String create(Diary diary) throws CustomException {
     if(diary.getTitle() == null || diary.getTitle().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "title");
     }
@@ -51,6 +51,7 @@ public class DiaryServiceImpl implements DiaryService{
     }
     diary.setId(UUID.randomUUID().toString());
     diaryMapper.create(diary);
+    return diary.getId();
   }
 
   @Override

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.space.diary.mapper.attachment.AttachmentMapper">
+
+    <resultMap id="BaseResultMap" type="Attachment">
+        <id column="diary_id" property="diaryId"/>
+        <result column="file_name" property="fileName"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_date" property="updateDate"/>
+    </resultMap>
+
+    <sql id="columns">
+        ${alias}diary_id AS ${prefix}diary_id
+        , ${alias}file_name AS ${prefix}file_name
+        , ${alias}create_date AS ${prefix}create_date
+        , ${alias}update_date AS ${prefix}update_date
+    </sql>
+
+    <insert id="create" parameterType="List">
+        INSERT INTO
+        attachment (diary_id, file_name)
+        VALUES
+        <foreach collection="attachmentList" item="attachment" open="(" separator=", " close=")">
+            #{attachment.diaryId}, #{attachment.fileName}
+        </foreach>
+    </insert>
+
+</mapper>

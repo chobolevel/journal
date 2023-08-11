@@ -13,7 +13,7 @@
                 <a href="/member/sign/up">회원가입</a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a href="/diary">
+                <a href="/diary?pageNum=1&limit=10">
                     <p>일기 목록</p>
                 </a>
             </li>

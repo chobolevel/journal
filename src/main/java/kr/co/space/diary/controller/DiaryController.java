@@ -1,17 +1,23 @@
 package kr.co.space.diary.controller;
 
 import kr.co.space.diary.config.security.principal.PrincipalDetails;
+import kr.co.space.diary.entity.attachment.Attachment;
 import kr.co.space.diary.entity.common.Criteria;
 import kr.co.space.diary.entity.common.Paging;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.exception.CustomException;
+import kr.co.space.diary.service.attachment.AttachmentService;
 import kr.co.space.diary.service.diary.DiaryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -20,6 +26,10 @@ import java.util.List;
 public class DiaryController {
   
   private final DiaryService diaryService;
+  private final AttachmentService attachmentService;
+
+  @Value("${spring.servlet.multipart.location}")
+  private String basePath;
 
   @GetMapping("write")
   public String write(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
@@ -28,9 +38,18 @@ public class DiaryController {
   }
   
   @PostMapping("write")
-  public String write(Diary diary) throws CustomException {
-    diaryService.create(diary);
-    // 추후 페이징 완료되면 글 목록으로 이동 처리
+  public String write(Diary diary, @RequestParam("uploadFiles") List<MultipartFile> uploadFiles) throws CustomException, IOException {
+    String createdDiaryId = diaryService.create(diary);
+
+    List<Attachment> attachmentList = uploadFiles.stream().map((file) -> new Attachment(createdDiaryId, file.getOriginalFilename())).toList();
+
+    // 글 별로 폴더를 생성하고 해당 폴더로 분리해서 이미지 저장
+    File folder = new File(basePath + "\\" + createdDiaryId);
+    folder.mkdir();
+    for(MultipartFile file : uploadFiles) {
+      file.transferTo(new File(String.format("%s\\%s", createdDiaryId, file.getOriginalFilename())));
+    }
+    attachmentService.create(attachmentList);
     return "redirect:/diary";
   }
 
@@ -58,7 +77,7 @@ public class DiaryController {
   }
 
   @PutMapping("modify/{id}")
-  public String modify(@PathVariable("id") String id, Diary diary) throws CustomException {
+  public String modify(@PathVariable("id") String id, Diary diary, @RequestParam("uploadFiles") List<MultipartFile> uploadFiles) throws CustomException {
     diary.setId(id);
     diaryService.modify(diary);
     return "redirect:/diary";

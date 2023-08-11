@@ -13,6 +13,11 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  servlet:
+    multipart:
+      location: C:\dev\project\diary\src\main\resources\static\img
+      max-file-size: 200MB
+      max-request-size: 100MB
 # mybatis config
 mybatis:
   type-aliases-package: kr.co.space.diary.entity
