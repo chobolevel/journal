@@ -10,6 +10,8 @@ import kr.co.space.diary.service.attachment.AttachmentService;
 import kr.co.space.diary.service.diary.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,6 +83,18 @@ public class DiaryController {
     diary.setId(id);
     diaryService.modify(diary);
     return "redirect:/diary";
+  }
+
+  @PutMapping("increase-view-cnt/{id}")
+  public ResponseEntity<?> increaseViewCnt(@PathVariable("id") String id) throws CustomException {
+    diaryService.increaseViewCnt(Diary.builder().id(id).build());
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PutMapping("increase-like-cnt/{id}")
+  public ResponseEntity<?> increaseLikeCnt(@PathVariable("id") String id) throws CustomException {
+    diaryService.increaseLikeCnt(Diary.builder().id(id).build());
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @DeleteMapping("remove/{id}")

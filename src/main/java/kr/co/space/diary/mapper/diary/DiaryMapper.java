@@ -19,6 +19,10 @@ public interface DiaryMapper {
 
   void modify(Diary diary);
 
+  void increaseViewCnt(Diary diary);
+
+  void increaseLikeCnt(Diary diary);
+
   void remove(Diary diary);
 
 }

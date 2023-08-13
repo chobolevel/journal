@@ -63,6 +63,22 @@ public class DiaryServiceImpl implements DiaryService {
   }
 
   @Override
+  public void increaseViewCnt(Diary diary) throws CustomException {
+    if(diary.getId() == null || diary.getId().isEmpty()) {
+      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
+    }
+    diaryMapper.increaseViewCnt(diary);
+  }
+
+  @Override
+  public void increaseLikeCnt(Diary diary) throws CustomException {
+    if(diary.getId() == null || diary.getId().isEmpty()) {
+      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
+    }
+    diaryMapper.increaseLikeCnt(diary);
+  }
+
+  @Override
   public void remove(Diary diary) throws CustomException {
     if(diary.getId() == null || diary.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");

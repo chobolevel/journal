@@ -18,6 +18,10 @@ public interface DiaryService {
 
   void modify(Diary diary) throws CustomException;
 
+  void increaseViewCnt(Diary diary) throws CustomException;
+
+  void increaseLikeCnt(Diary diary) throws CustomException;
+
   void remove(Diary diary) throws CustomException;
 
 }

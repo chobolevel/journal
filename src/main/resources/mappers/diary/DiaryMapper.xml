@@ -8,6 +8,8 @@
         <result column="content" property="content"/>
         <result column="writer_id" property="writerId"/>
         <result column="public_yn" property="publicYn"/>
+        <result column="view_cnt" property="viewCnt"/>
+        <result column="like_cnt" property="likeCnt"/>
         <result column="create_date" property="createDate"/>
         <result column="update_date" property="updateDate"/>
     </resultMap>
@@ -30,6 +32,8 @@
         , ${alias}content AS ${prefix}content
         , ${alias}writer_id AS ${prefix}writer_id
         , ${alias}public_yn AS ${prefix}public_yn
+        , ${alias}view_cnt AS ${prefix}view_cnt
+        , ${alias}like_cnt AS ${prefix}like_cnt
         , ${alias}create_date AS ${prefix}create_date
         , ${alias}update_date AS ${prefix}update_date
     </sql>
@@ -103,6 +107,20 @@
         <if test="content != null and content != ''">
             , content = #{content}
         </if>
+        WHERE id = #{id}
+    </update>
+
+    <update id="increaseViewCnt" parameterType="Diary">
+        UPDATE diary
+        SET update_date = current_timestamp
+        , view_cnt = view_cnt + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="increaseLikeCnt" parameterType="Diary">
+        UPDATE diary
+        SET update_date = current_timestamp
+        , like_cnt = like_cnt + 1
         WHERE id = #{id}
     </update>
 

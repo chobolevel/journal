@@ -19,6 +19,8 @@ public class Diary extends Base {
     private String content;
     private String writerId;
     private String publicYn;
+    private int viewCnt;
+    private int likeCnt;
 
     private Member writer;
     private List<Attachment> attachmentList;
