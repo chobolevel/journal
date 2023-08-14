@@ -9,10 +9,25 @@
 
 <section layout:fragment="content">
     <h2>내 정보</h2>
-    <p th:text="${member.name}"></p>
-    <p th:text="${member.nickname}"></p>
+    <p class="profile-name"></p>
+    <p class="profile-nickname"></p>
     <button class="resign_btn">계정 탈퇴</button>
 </section>
 
 </body>
 </html>
+
+<script th:inline="javascript">
+    $.ajax({
+        url: 'http://localhost:8080/api/member/me',
+        type: 'GET',
+        contentType: 'application/json',
+        success: (data) => {
+            $('.profile-name').text(data.name)
+            $('.profile-nickname').text(data.nickname)
+        },
+        error: () => {
+            console.log('fail to load')
+        }
+    })
+</script>
