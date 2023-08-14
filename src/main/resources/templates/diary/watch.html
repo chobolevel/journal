@@ -8,13 +8,12 @@
 <body>
 
 <section layout:fragment="content">
+    <h2 class="diary-title"></h2>
+    <p class="diary-content"></p>
     <ul>
-        <li th:each="image : ${diary.attachmentList}">
-            <img style="width: 300px; height: 300px;" th:src="@{/img/{folder}/{fileName}(folder=${image.diaryId}, fileName=${image.fileName})}">
+        <li class="diary-upload-files">
         </li>
     </ul>
-    <h2 th:text="${diary.title}"></h2>
-    <p th:text="${diary.content}"></p>
     <button class="modify-btn">수정하기</button>
     <button class="remove-btn">삭제하기</button>
 </section>
@@ -23,26 +22,44 @@
 </html>
 
 <script th:inline="javascript">
-    const member = [[${member}]]
-    const diary = [[${diary}]]
-    const modifyBtn = document.querySelector('.modify-btn')
-    const removeBtn = document.querySelector('.remove-btn')
-    console.log(diary)
+    const searchParams = new URLSearchParams(location.search)
+    const diaryId = searchParams.get('id')
 
-    modifyBtn.addEventListener('click', (e) => {
+    $.ajax({
+        url: `http://localhost:8080/api/diary/${diaryId}`,
+        type: 'GET',
+        contentType: 'application/json',
+        success: (data) => {
+            data.attachmentList.forEach((attachment) => {
+                $('.diary-upload-files').append(`<img src="/static/img/${attachment.diaryId}/${attachment.fileName}"/>`)
+            })
+            $('.diary-title').text(data.title)
+            $('.diary-content').text(data.content)
+        },
+        error: () => {
+            location.href = '/diary/list'
+        }
+    })
+
+    $('.modify-btn').on('click', (e) => {
         e.preventDefault()
         location.href = `/diary/modify/${diary.id}`
     })
-    // form 만들고 전송하는 코드
-    removeBtn.addEventListener('click', (e) => {
+    $('.remove-btn').on('click', (e) => {
         e.preventDefault()
-        if(confirm('정말 삭제하시겠습니까?')) {
-            const form = document.createElement('form')
-            form.action = `/diary/remove/${diary.id}`
-            form.method = 'post'
-            form.innerHTML = "<input type='hidden' name='_method' value='DELETE'>"
-            document.body.append(form)
-            form.submit()
-        }
+        $.ajax({
+            url: `http://localhost:8080/diary/${diary.id}`,
+            type: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            success: (result) => {
+                alert('일기 삭제 성공!')
+                location.href = '/diary?pageNum=1&limit=10'
+            },
+            error: (error) => {
+                alert('일기 삭제 실패')
+            }
+        })
     })
 </script>

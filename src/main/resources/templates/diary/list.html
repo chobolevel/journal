@@ -11,46 +11,50 @@
     <h2>일기 목록</h2>
     <button class="write-btn">글 쓰기</button>
     <table>
+        <thead>
         <tr>
-            <th>번호</th>
-            <th>제목</th>
+            <th>글 번호</th>
+            <th>제 목</th>
             <th>작성자</th>
+            <th>조회수</th>
+            <th>좋아요</th>
         </tr>
-        <tr th:each="diary, index : ${list}">
-            <td th:text="${index.count}"></td>
-            <td>
-                <a th:href="@{/diary/{id}(id=${diary.id})}">
-                    <p th:text="${diary.title}"></p>
-                </a>
-            </td>
-            <td>
-                <p th:text="${diary.writer.name}"></p>
-            </td>
-        </tr>
+        </thead>
+        <tbody class="diary-list">
+
+        </tbody>
     </table>
-    <div>
-        <ul>
-            <li th:if="${paging.prev}">
-                <a href="#">prev</a>
-            </li>
-            <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-                <a th:href="@{/diary(pageNum=${num}, limit=${paging.cri.limit})}" th:text="${num}"></a>
-            </li>
-            <li th:if="${paging.next}">
-                <a href="#">next</a>
-            </li>
-        </ul>
-    </div>
 </section>
 
 </body>
 </html>
 
 <script th:inline="javascript">
-    const writeBtn = document.querySelector('.write-btn')
-    console.log([[${paging}]])
+    const $writeBtn = $('.write-btn')
 
-    writeBtn.addEventListener('click', (e) => {
+    $.ajax({
+        url: 'http://localhost:8080/api/diary/list',
+        type: 'GET',
+        contentType: 'application/json',
+        success: (data) => {
+            data.forEach((diary, index) => {
+                $('.diary-list').append(
+                    `<tr>
+                   <td>${index + 1}</td>
+                   <td><a href="/diary?id=${diary.id}">${diary.title}</a></td>
+                   <td>${diary.writer.nickname}</td>
+                   <td>${diary.viewCnt}</td>
+                   <td>${diary.likeCnt}</td>
+                 </tr>`
+                )
+            })
+        },
+        error: () => {
+            location.href = '/'
+        }
+    })
+
+    $writeBtn.on('click', (e) => {
         e.preventDefault()
         location.href = '/diary/write'
     })

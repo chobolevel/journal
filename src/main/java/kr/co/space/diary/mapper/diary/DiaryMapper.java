@@ -1,6 +1,5 @@
 package kr.co.space.diary.mapper.diary;
 
-import kr.co.space.diary.entity.common.Criteria;
 import kr.co.space.diary.entity.diary.Diary;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,7 +10,7 @@ public interface DiaryMapper {
 
   int findCount();
 
-  List<Diary> findAll(Diary diary, Criteria cri);
+  List<Diary> findAll(Diary diary);
 
   Diary findOne(Diary diary);
 

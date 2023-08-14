@@ -9,8 +9,7 @@
 
 <section layout:fragment="content">
     <h2>일기를 작성하세요</h2>
-    <form enctype="multipart/form-data" method="post" th:action="@{/diary/write}">
-        <input name="writerId" th:value="${member.id}" type="hidden">
+    <form class="write-form">
         <div>
             <input name="title" placeholder="제목" type="text">
         </div>
@@ -20,9 +19,71 @@
         <div>
             <input multiple="multiple" name="uploadFiles" type="file">
         </div>
-        <button>저장하기</button>
+        <button class="submit-btn">저장하기</button>
+        <button class="cancel-btn">작성취소</button>
     </form>
 </section>
 
 </body>
 </html>
+
+<script th:inline="javascript">
+    const $writeForm = $('.write-form')
+    const $titleInput = $('input[name=title]')
+    const $contentTextarea = $('textarea[name=content]')
+    const $uploadFiles = $('input[name=uploadFiles]')
+    const $submitBtn = $('.submit-btn')
+    const $cancelBtn = $('.cancel-btn')
+    let user = {}
+
+    $.ajax({
+        url: 'http://localhost:8080/api/member/me',
+        type: 'GET',
+        contentType: 'application/json',
+        success: (data) => {
+            user = data
+        },
+        error: () => {
+            alert('로그인을 한 상태에서만 이용할 수 있습니다.')
+            location.href = '/member/sign/in'
+        }
+    })
+    $writeForm.on('submit', (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        const data = {
+            title: $titleInput.val(),
+            content: $contentTextarea.val(),
+            writerId: user.id
+        }
+        formData.append('diary', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+        Array.from($uploadFiles[0].files).forEach((file) => {
+            formData.append('uploadFiles', file)
+        })
+        $.ajax({
+            url: 'http://localhost:8080/api/diary/write',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            encType: 'multipart/form-data',
+            dataType: 'json',
+            data: formData,
+            success: () => {
+                alert('일기 저장 성공')
+                location.href = '/diary/list'
+            },
+            error: () => {
+                alert('일기 저장 실패')
+            }
+        })
+    })
+    $submitBtn.on('click', (e) => {
+        e.preventDefault()
+        $writeForm.submit()
+    })
+    $cancelBtn.on('click', (e) => {
+        e.preventDefault()
+        location.href = '/diary/list'
+    })
+</script>

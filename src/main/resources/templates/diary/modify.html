@@ -9,12 +9,15 @@
 
 <section layout:fragment="content">
     <h2>일기 내용을 수정하세요.</h2>
-    <form th:action="@{/diary/modify/{id}(id=${diary.id})}" th:method="put">
+    <form class="modify-form">
         <div>
             <input name="title" placeholder="제목" th:value="${diary.title}" type="text">
         </div>
         <div>
             <textarea name="content" placeholder="내용을 입력하세요.." th:text="${diary.content}" th:value="${diary.content}"></textarea>
+        </div>
+        <div>
+            <input multiple="multiple" name="uploadFile" type="file"/>
         </div>
         <button>저장하기</button>
     </form>
@@ -22,3 +25,41 @@
 
 </body>
 </html>
+
+<script th:inline="javascript">
+    const diary = [[${diary}]]
+    const $titleInput = $('input[name=title]')
+    const $contentTextarea = $('textarea[name=content]')
+    const $fileInput = $('input[name=uploadFiles]')
+
+    $('.modify-form').on('submit', (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        const data = {
+            id: diary.id,
+            title: $titleInput.val(),
+            content: $contentTextarea.val()
+        }
+        formData.append('diary', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+        $.ajax({
+            url: `http://localhost:8080/api/diary/${diary.id}`,
+            type: 'PUT',
+            contentType: false,
+            processData: false,
+            cache: false,
+            encType: 'multipart/form-data',
+            dataType: 'json',
+            data: formData,
+            success: (res) => {
+                alert('일기 수정 성공')
+                console.log(res)
+                location.href = `/diary/${diary.id}`
+            },
+            error: (request, status, error) => {
+                alert('일기 수정 실패')
+                console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
+                // location.href = `/diary/${diary.id}`
+            }
+        })
+    })
+</script>

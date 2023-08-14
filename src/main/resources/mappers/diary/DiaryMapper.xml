@@ -56,11 +56,7 @@
         FROM diary AS d
         LEFT OUTER JOIN member AS m
             ON d.writer_id = m.id
-        <where>
-            d.writer_id = #{diary.writerId}
-        </where>
         ORDER BY d.create_date DESC
-        LIMIT #{cri.limit} OFFSET #{cri.offset}
     </select>
 
 
