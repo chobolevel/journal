@@ -31,7 +31,7 @@
         contentType: 'application/json',
         success: (data) => {
             data.attachmentList.forEach((attachment) => {
-                $('.diary-upload-files').append(`<img src="/static/img/${attachment.diaryId}/${attachment.fileName}"/>`)
+                $('.diary-upload-files').append(`<img src="/img/${attachment.diaryId}/${attachment.fileName}" alt="${attachment.fileName}" style="width: 200px; height: 200px;"/>`)
             })
             $('.diary-title').text(data.title)
             $('.diary-content').text(data.content)
