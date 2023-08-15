@@ -21,9 +21,14 @@
         </tr>
         </thead>
         <tbody class="diary-list">
-
         </tbody>
     </table>
+    <div class="paging-area">
+        <span>prev</span>
+        <ul class="paging-numbers">
+        </ul>
+        <span>next</span>
+    </div>
 </section>
 
 </body>
@@ -31,13 +36,14 @@
 
 <script th:inline="javascript">
     const $writeBtn = $('.write-btn')
+    const $pagingNumbers = $('.paging-numbers')
 
     $.ajax({
-        url: 'http://localhost:8080/api/diary/list',
+        url: 'http://localhost:8080/api/diary/list?pageNum=1&limit=10',
         type: 'GET',
         contentType: 'application/json',
         success: (data) => {
-            data.forEach((diary, index) => {
+            data.diaryList.forEach((diary, index) => {
                 $('.diary-list').append(
                     `<tr>
                    <td>${index + 1}</td>
@@ -48,6 +54,35 @@
                  </tr>`
                 )
             })
+            for(let i = 1; i <= Math.ceil(data.totalCnt / data.limit); i++) {
+                const $li = $(`<li><span>${i}</span></li>`)
+                $li.on('click', (e) => {
+                    e.preventDefault()
+                    $.ajax({
+                        url: `http://localhost:8080/api/diary/list?pageNum=${e.target.innerText}&limit=10`,
+                        type: 'GET',
+                        contentType: 'application/json',
+                        success: (data) => {
+                            $('.diary-list').children().remove()
+                            data.diaryList.forEach((diary, index) => {
+                                $('.diary-list').append(
+                                    `<tr>
+                                       <td>${index + 1}</td>
+                                       <td><a href="/diary?id=${diary.id}">${diary.title}</a></td>
+                                       <td>${diary.writer.nickname}</td>
+                                       <td>${diary.viewCnt}</td>
+                                       <td>${diary.likeCnt}</td>
+                                     </tr>`
+                                )
+                            })
+                        },
+                        error: () => {
+                            location.href = '/'
+                        }
+                    })
+                })
+                $pagingNumbers.append($li)
+            }
         },
         error: () => {
             location.href = '/'

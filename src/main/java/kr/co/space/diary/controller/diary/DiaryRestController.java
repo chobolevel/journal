@@ -1,6 +1,7 @@
 package kr.co.space.diary.controller.diary;
 
 import kr.co.space.diary.entity.attachment.Attachment;
+import kr.co.space.diary.entity.diary.Diaries;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.exception.CustomException;
 import kr.co.space.diary.service.attachment.AttachmentService;
@@ -32,8 +33,11 @@ public class DiaryRestController {
   }
 
   @GetMapping("list")
-  public List<Diary> search() throws CustomException {
-    return diaryService.findAll(Diary.builder().build());
+  public Diaries search(Diaries diaries) throws CustomException {
+    List<Diary> diaryList = diaryService.findAll(diaries);
+    diaries.setDiaryList(diaryList);
+    diaries.setTotalCnt(diaryService.findCount());
+    return diaries;
   }
 
   @PostMapping("write")

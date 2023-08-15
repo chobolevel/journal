@@ -1,5 +1,6 @@
 package kr.co.space.diary.service.diary;
 
+import kr.co.space.diary.entity.diary.Diaries;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.exception.CustomException;
 
@@ -9,7 +10,7 @@ public interface DiaryService {
 
   int findCount();
 
-  List<Diary> findAll(Diary diary);
+  List<Diary> findAll(Diaries diaries);
 
   Diary findOne(Diary diary) throws CustomException;
 

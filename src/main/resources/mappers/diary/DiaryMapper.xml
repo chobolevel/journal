@@ -42,7 +42,7 @@
         SELECT COUNT(*) FROM diary
     </select>
 
-    <select id="findAll" parameterType="Diary" resultMap="RelatedResultMap">
+    <select id="findAll" parameterType="Diaries" resultMap="RelatedResultMap">
         SELECT
         <include refid="columns">
             <property name="alias" value="d."/>
@@ -57,6 +57,7 @@
         LEFT OUTER JOIN member AS m
             ON d.writer_id = m.id
         ORDER BY d.create_date DESC
+        LIMIT #{offset}, ${limit}
     </select>
 
 
