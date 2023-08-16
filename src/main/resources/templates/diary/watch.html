@@ -41,6 +41,11 @@
         }
     })
 
+    $.ajax({
+        url: `http://localhost:8080/api/diary/increase-view-cnt/${diaryId}`,
+        type: 'PUT'
+    })
+
     $('.modify-btn').on('click', (e) => {
         e.preventDefault()
         location.href = `/diary/modify/${diary.id}`
