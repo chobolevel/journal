@@ -18,6 +18,16 @@ spring:
       location: C:\dev\project\diary\src\main\resources\static\img
       max-file-size: 200MB
       max-request-size: 100MB
+  # redis config
+  redis:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 2
+    host: localhost
+    port: 6379
+    password: ""
 # mybatis config
 mybatis:
   type-aliases-package: kr.co.space.diary.entity
