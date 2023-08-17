@@ -69,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
     if(member.getId() == null || member.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
     }
-    member.setActivateYn(MemberResignType.RESIGN.getCode());
+    member.setResignYn(MemberResignType.RESIGN.getName());
     memberMapper.modify(member);
   }
 }
