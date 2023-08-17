@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko"
+      layout:decorate="~{layout/default_layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>나만의 일기 - 홈</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+    <h2>회원 정보 수정</h2>
+    <form class="member-modify-form">
+        <div>
+            <input name="name" placeholder="이름" type="text">
+        </div>
+        <div>
+            <input name="nickname" placeholder="닉네임" type="text">
+        </div>
+        <button class="submit-btn">수정</button>
+        <button class="cancel-btn">취소</button>
+    </form>
+</section>
+
+</body>
+</html>
+
+<script>
+    const $memberModifyForm = $('.member-modify-form')
+    const $nameInput = $('input[name=name]')
+    const $nicknameInput = $('input[name=nickname]')
+    const $submitBtn = $('.submit-btn')
+    const $cancelBtn = $('.cancel-btn')
+    let memberId
+
+    $.ajax({
+        url: 'http://localhost:8080/api/member/me',
+        type: 'GET',
+        contentType: 'application/json',
+        success: (data) => {
+            memberId = data.id
+            $nameInput.val(data.name)
+            $nicknameInput.val(data.nickname)
+        },
+        error: () => {
+            location.href = '/member/profile'
+        }
+    })
+
+    $memberModifyForm.on('submit', (e) => {
+        e.preventDefault()
+        $.ajax({
+            url: `http://localhost:8080/api/member/${memberId}`,
+            type: 'PUT',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                name: $nameInput.val(),
+                nickname: $nicknameInput.val()
+            }),
+            success: () => {
+                alert('회원 정보 수정 성공')
+                location.href = '/member/profile'
+            },
+            error: () => {
+                alert('회원 정보 수정 실패')
+            }
+        })
+    })
+    $submitBtn.on('click', (e) => {
+        e.preventDefault()
+        $memberModifyForm.submit()
+    })
+    $cancelBtn.on('click', (e) => {
+        e.preventDefault()
+        location.href = '/member/profile'
+    })
+</script>

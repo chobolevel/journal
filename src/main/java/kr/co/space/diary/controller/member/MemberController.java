@@ -28,4 +28,9 @@ public class MemberController {
     return "/member/profile";
   }
 
+  @GetMapping("modify")
+  public String modify() {
+    return "/member/modify";
+  }
+
 }

@@ -11,23 +11,52 @@
     <h2>내 정보</h2>
     <p class="profile-name"></p>
     <p class="profile-nickname"></p>
-    <button class="resign_btn">계정 탈퇴</button>
+    <button class="modify-btn">정보 수정</button>
+    <button class="resign-btn">계정 탈퇴</button>
 </section>
 
 </body>
 </html>
 
 <script th:inline="javascript">
+    const $modifyBtn = $('.modify-btn')
+    const $resignBtn = $('.resign-btn')
+    let memberId
+
     $.ajax({
         url: 'http://localhost:8080/api/member/me',
         type: 'GET',
         contentType: 'application/json',
         success: (data) => {
+            memberId = data.id
             $('.profile-name').text(data.name)
             $('.profile-nickname').text(data.nickname)
         },
         error: () => {
             console.log('fail to load')
+        }
+    })
+
+    $modifyBtn.on('click', (e) => {
+        e.preventDefault()
+        location.href = '/member/modify'
+    })
+    $resignBtn.on('click', (e) => {
+        e.preventDefault()
+        if(confirm('정말 계정을 탈퇴하시겠습니까?')) {
+            $.ajax({
+                url: `http://localhost:8080/api/member/${memberId}`,
+                type: 'DELETE',
+                success: () => {
+                    alert('계정 탈퇴 처리 성공!')
+                    location.href = '/member/logout'
+                },
+                error: () => {
+                    alert('계정 탈퇴 처리 실패\n관리자에게 문의해 주세요.')
+                }
+            })
+        } else {
+            alert('계정 탈퇴 처리 취소')
         }
     })
 </script>

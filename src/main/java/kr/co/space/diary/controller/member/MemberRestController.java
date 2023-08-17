@@ -36,7 +36,8 @@ public class MemberRestController {
   }
 
   @PutMapping("{id}")
-  public HttpStatus modify(Member member) throws CustomException {
+  public HttpStatus modify(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
+    member.setId(id);
     memberService.modify(member);
     return HttpStatus.OK;
   }
