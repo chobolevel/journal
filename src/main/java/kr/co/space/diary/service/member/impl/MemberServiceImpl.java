@@ -2,6 +2,7 @@ package kr.co.space.diary.service.member.impl;
 
 import kr.co.space.diary.entity.member.Member;
 import kr.co.space.diary.enums.common.CustomExceptionType;
+import kr.co.space.diary.enums.member.MemberResignType;
 import kr.co.space.diary.enums.member.MemberRoleType;
 import kr.co.space.diary.exception.CustomException;
 import kr.co.space.diary.mapper.member.MemberMapper;
@@ -68,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
     if(member.getId() == null || member.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
     }
-    member.setActivateYn("y");
+    member.setActivateYn(MemberResignType.RESIGN.getCode());
     memberMapper.modify(member);
   }
 }
