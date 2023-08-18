@@ -48,7 +48,7 @@
 
     $('.modify-btn').on('click', (e) => {
         e.preventDefault()
-        location.href = `/diary/modify/${diary.id}`
+        location.href = `/diary/modify?id=${diaryId}`
     })
     $('.remove-btn').on('click', (e) => {
         e.preventDefault()

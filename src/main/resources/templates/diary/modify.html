@@ -11,15 +11,19 @@
     <h2>일기 내용을 수정하세요.</h2>
     <form class="modify-form">
         <div>
-            <input name="title" placeholder="제목" th:value="${diary.title}" type="text">
+            <input name="title" placeholder="제목" type="text">
         </div>
         <div>
-            <textarea name="content" placeholder="내용을 입력하세요.." th:text="${diary.content}" th:value="${diary.content}"></textarea>
+            <textarea name="content" placeholder="내용을 입력하세요.."></textarea>
         </div>
         <div>
             <input multiple="multiple" name="uploadFile" type="file"/>
         </div>
-        <button>저장하기</button>
+        <div>
+            <ul class="uploaded-files"></ul>
+        </div>
+        <button class="submit-btn">저장하기</button>
+        <button class="cancel-btn">취소하기</button>
     </form>
 </section>
 
@@ -27,22 +31,43 @@
 </html>
 
 <script th:inline="javascript">
-    const diary = [[${diary}]]
+    const searchParams = new URLSearchParams(location.search)
+    const diaryId = searchParams.get('id')
+    const $modifyForm = $('.modify-form')
     const $titleInput = $('input[name=title]')
     const $contentTextarea = $('textarea[name=content]')
+    const $uploadedFiles = $('.uploaded-files')
     const $fileInput = $('input[name=uploadFiles]')
+    const $submitBtn = $('.submit-btn')
+    const $cancelBtn = $('.cancel-btn')
 
-    $('.modify-form').on('submit', (e) => {
+    $.ajax({
+        url: `http://localhost:8080/api/diary/${diaryId}`,
+        type: 'GET',
+        contentType: 'application/json',
+        success: (data) => {
+            $titleInput.val(data.title)
+            $contentTextarea.val(data.content)
+            data.attachmentList.forEach((attachment) => {
+                $uploadedFiles.append(`<li><p>${attachment.fileName}</p></li>`)
+            })
+        },
+        error: () => {
+            location.href = '/diary/watch'
+        }
+    })
+
+    $modifyForm.on('submit', (e) => {
         e.preventDefault()
         const formData = new FormData()
         const data = {
-            id: diary.id,
+            id: diaryId,
             title: $titleInput.val(),
             content: $contentTextarea.val()
         }
         formData.append('diary', new Blob([JSON.stringify(data)], { type: 'application/json' }))
         $.ajax({
-            url: `http://localhost:8080/api/diary/${diary.id}`,
+            url: `http://localhost:8080/api/diary/${diaryId}`,
             type: 'PUT',
             contentType: false,
             processData: false,
@@ -53,7 +78,7 @@
             success: (res) => {
                 alert('일기 수정 성공')
                 console.log(res)
-                location.href = `/diary/${diary.id}`
+                location.href = `/diary/${diaryId}`
             },
             error: (request, status, error) => {
                 alert('일기 수정 실패')
@@ -61,5 +86,13 @@
                 // location.href = `/diary/${diary.id}`
             }
         })
+    })
+    $submitBtn.on('click', (e) => {
+        e.preventDefault()
+        $modifyForm.submit()
+    })
+    $cancelBtn.on('click', (e) => {
+        e.preventDefault()
+        location.href = `/diary?id=${diaryId}`
     })
 </script>
