@@ -9,6 +9,7 @@
 
 <section layout:fragment="content">
     <h2>로그인</h2>
+    <p th:if="${error == true}" th:text="${errorMessage}"></p>
     <form action="/member/sign/in" method="post">
         <div>
             <input name="username" placeholder="아이디" type="text">
