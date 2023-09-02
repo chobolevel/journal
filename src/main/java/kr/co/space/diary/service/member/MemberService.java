@@ -15,6 +15,8 @@ public interface MemberService {
 
   void modify(Member member) throws CustomException;
 
+  void changePassword(Member member) throws CustomException;
+
   void resign(Member member) throws CustomException;
 
 }
