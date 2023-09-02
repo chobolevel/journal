@@ -12,6 +12,7 @@
     <p class="profile-name"></p>
     <p class="profile-nickname"></p>
     <button class="modify-btn">정보 수정</button>
+    <button class="change-password-btn">비밀번호 변경</button>
     <button class="resign-btn">계정 탈퇴</button>
 </section>
 
@@ -20,6 +21,7 @@
 
 <script th:inline="javascript">
     const $modifyBtn = $('.modify-btn')
+    const $changePwBtn = $('.change-password-btn')
     const $resignBtn = $('.resign-btn')
     let memberId
 
@@ -34,12 +36,18 @@
         },
         error: () => {
             console.log('fail to load')
+            // TODO 회원 정보 없을 때의 처리
+            location.href = '/'
         }
     })
 
     $modifyBtn.on('click', (e) => {
         e.preventDefault()
         location.href = '/member/modify'
+    })
+    $changePwBtn.on('click', (e) => {
+        e.preventDefault()
+        location.href = '/member/change-password'
     })
     $resignBtn.on('click', (e) => {
         e.preventDefault()
