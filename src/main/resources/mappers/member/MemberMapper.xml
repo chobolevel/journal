@@ -65,8 +65,8 @@
         <if test="username != null and username != ''">
             , username = #{username}
         </if>
-        <if test="password != null and password != ''">
-            , password = #{password}
+        <if test="toChangePassword != null and toChangePassword != ''">
+            , password = #{toChangePassword}
         </if>
         <if test="name != null and name != ''">
             , name = #{name}
