@@ -73,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
     }
     Member findMember = memberMapper.findOne(member);
     if(passwordEncoder.matches(member.getPassword(), findMember.getPassword())) {
+      member.setToChangePassword(passwordEncoder.encode(member.getToChangePassword()));
       memberMapper.modify(member);
     } else {
       throw new CustomException(CustomExceptionType.NOT_MATCH_PASSWORD);
