@@ -44,6 +44,8 @@ public class MemberRestController {
 
   @PutMapping("change-password/{id}")
   public HttpStatus changePassword(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
+    member.setId(id);
+    memberService.changePassword(member);
     return HttpStatus.OK;
   }
 
