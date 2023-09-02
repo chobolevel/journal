@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public enum CustomExceptionType {
 
-  MISSING_PARAMETER(HttpStatus.BAD_REQUEST, "#0[Type: #1]이/가 누락되었습니다.");
+  MISSING_PARAMETER(HttpStatus.BAD_REQUEST, "#0[Type: #1]이/가 누락되었습니다."),
+  NOT_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호와 일치하지 않습니다.");
 
 
   private final HttpStatus status;
