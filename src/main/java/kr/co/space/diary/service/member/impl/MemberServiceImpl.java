@@ -65,6 +65,22 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  public void changePassword(Member member) throws CustomException {
+    if(member.getPassword() == null || member.getPassword().isEmpty()) {
+      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "password");
+    } else if(member.getToChangePassword() == null || member.getToChangePassword().isEmpty()) {
+      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "toChangePassword");
+    }
+    Member findMember = memberMapper.findOne(member);
+    if(passwordEncoder.matches(member.getPassword(), findMember.getPassword())) {
+      member.setToChangePassword(passwordEncoder.encode(member.getToChangePassword()));
+      memberMapper.modify(member);
+    } else {
+      throw new CustomException(CustomExceptionType.NOT_MATCH_PASSWORD);
+    }
+  }
+
+  @Override
   public void resign(Member member) throws CustomException {
     if(member.getId() == null || member.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");

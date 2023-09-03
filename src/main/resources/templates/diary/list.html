@@ -13,7 +13,6 @@
     <table>
         <thead>
         <tr>
-            <th>글 번호</th>
             <th>제 목</th>
             <th>작성자</th>
             <th>조회수</th>
@@ -24,10 +23,10 @@
         </tbody>
     </table>
     <div class="paging-area">
-        <span>prev</span>
+        <div class="prev-btn"></div>
         <ul class="paging-numbers">
         </ul>
-        <span>next</span>
+        <div class="next-btn"></div>
     </div>
 </section>
 
@@ -36,6 +35,9 @@
 
 <script th:inline="javascript">
     const $writeBtn = $('.write-btn')
+    const $diaryList = $('.diary-list')
+    const $prevBtn = $('.prev-btn')
+    const $nextBtn = $('.next-btn')
     const $pagingNumbers = $('.paging-numbers')
 
     $.ajax({
@@ -43,17 +45,7 @@
         type: 'GET',
         contentType: 'application/json',
         success: (data) => {
-            data.diaryList.forEach((diary, index) => {
-                $('.diary-list').append(
-                    `<tr>
-                   <td>${index + 1}</td>
-                   <td><a href="/diary?id=${diary.id}">${diary.title}</a></td>
-                   <td>${diary.writer.nickname}</td>
-                   <td>${diary.viewCnt}</td>
-                   <td>${diary.likeCnt}</td>
-                 </tr>`
-                )
-            })
+            paging(data)
             for(let i = 1; i <= Math.ceil(data.totalCnt / data.limit); i++) {
                 const $li = $(`<li><span>${i}</span></li>`)
                 $li.on('click', (e) => {
@@ -63,18 +55,8 @@
                         type: 'GET',
                         contentType: 'application/json',
                         success: (data) => {
-                            $('.diary-list').children().remove()
-                            data.diaryList.forEach((diary, index) => {
-                                $('.diary-list').append(
-                                    `<tr>
-                                       <td>${index + 1}</td>
-                                       <td><a href="/diary?id=${diary.id}">${diary.title}</a></td>
-                                       <td>${diary.writer.nickname}</td>
-                                       <td>${diary.viewCnt}</td>
-                                       <td>${diary.likeCnt}</td>
-                                     </tr>`
-                                )
-                            })
+                            $diaryList.children().remove()
+                            paging(data)
                         },
                         error: () => {
                             location.href = '/'
@@ -88,6 +70,69 @@
             location.href = '/'
         }
     })
+
+    const paging = (data) => {
+        const curPageNum = data.pageNum
+        const lastPageNum = Math.ceil(data.totalCnt / data.limit)
+        const $goPrevBtn = $(`<span>prev</span>`)
+        $goPrevBtn.on('click', (e) => {
+            e.preventDefault()
+            $.ajax({
+                url: 'http://localhost:8080/api/diary/list?pageNum=1&limit=10',
+                type: 'GET',
+                contentType: 'application/json',
+                success: (data) => {
+                    $diaryList.children().remove()
+                    paging(data)
+                },
+                error: () => {
+                    // TODO 에러 처리
+                }
+            })
+        })
+        const $goNextBtn = $(`<span>next</span>`)
+        $goNextBtn.on('click', (e) => {
+            e.preventDefault()
+            $.ajax({
+                url: `http://localhost:8080/api/diary/list?pageNum=${lastPageNum}&limit=10`,
+                type: 'GET',
+                contentType: 'application/json',
+                success: (data) => {
+                    $diaryList.children().remove()
+                    paging(data)
+                },
+                error: () => {
+                    // TODO 에러 처리
+                }
+            })
+        })
+        // next-btn 조건문 (코드 정리 필요)
+        if(curPageNum === lastPageNum) {
+            $nextBtn.children().remove()
+        } else {
+            if($nextBtn.children().length === 0) $nextBtn.append($goNextBtn)
+        }
+        // prev-btn 조건문 (코드 정리 필요)
+        if(curPageNum !== 1) {
+            if($prevBtn.children().length === 0) $prevBtn.append($goPrevBtn)
+        } else {
+            $prevBtn.children().remove()
+        }
+        addTableRow(data)
+    }
+
+    const addTableRow = (data) => {
+        data.diaryList.forEach((diary, index) => {
+            $diaryList.append(
+                `<tr>
+                   <td><a href="/diary?id=${diary.id}">${diary.title}</a></td>
+                   <td>${diary.writer.nickname}</td>
+                   <td>${diary.viewCnt}</td>
+                   <td>${diary.likeCnt}</td>
+                 </tr>`
+            )
+        })
+    }
 
     $writeBtn.on('click', (e) => {
         e.preventDefault()

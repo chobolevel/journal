@@ -42,6 +42,13 @@ public class MemberRestController {
     return HttpStatus.OK;
   }
 
+  @PutMapping("change-password/{id}")
+  public HttpStatus changePassword(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
+    member.setId(id);
+    memberService.changePassword(member);
+    return HttpStatus.OK;
+  }
+
   @DeleteMapping("{id}")
   public ResponseEntity<?> resign(@PathVariable("id") String id) throws CustomException {
     memberService.resign(Member.builder().id(id).build());
