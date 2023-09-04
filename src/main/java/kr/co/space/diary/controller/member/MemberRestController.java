@@ -2,6 +2,7 @@ package kr.co.space.diary.controller.member;
 
 import kr.co.space.diary.config.security.principal.PrincipalDetails;
 import kr.co.space.diary.entity.member.Member;
+import kr.co.space.diary.enums.common.CustomExceptionType;
 import kr.co.space.diary.exception.CustomException;
 import kr.co.space.diary.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,33 +21,36 @@ public class MemberRestController {
   private final MemberService memberService;
 
   @GetMapping("me")
-  public Member me(@AuthenticationPrincipal PrincipalDetails principalDetails) throws CustomException {
-    return memberService.findOne(Member.builder().id(principalDetails.getMember().getId()).build());
+  public ResponseEntity<?> me(@AuthenticationPrincipal PrincipalDetails principalDetails) throws CustomException {
+    if(principalDetails == null) {
+      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "UserDetails", "principalDetails");
+    }
+    return new ResponseEntity<>(memberService.findOne(Member.builder().id(principalDetails.getMember().getId()).build()), HttpStatus.OK);
   }
 
   @GetMapping("list")
-  public List<Member> list() throws CustomException {
-    return memberService.findAll(Member.builder().build());
+  public ResponseEntity<?> list() throws CustomException {
+    return new ResponseEntity<>(memberService.findAll(Member.builder().build()), HttpStatus.OK);
   }
 
   @PostMapping("/sign/up")
-  public HttpStatus signUp(@RequestBody Member member) throws CustomException {
+  public ResponseEntity<?> signUp(@RequestBody Member member) throws CustomException {
     memberService.create(member);
-    return HttpStatus.CREATED;
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @PutMapping("{id}")
-  public HttpStatus modify(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
+  public ResponseEntity<?> modify(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
     member.setId(id);
     memberService.modify(member);
-    return HttpStatus.OK;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PutMapping("change-password/{id}")
-  public HttpStatus changePassword(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
+  public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
     member.setId(id);
     memberService.changePassword(member);
-    return HttpStatus.OK;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @DeleteMapping("{id}")
