@@ -13,19 +13,13 @@
                 <a href="/member/sign/up">회원가입</a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a href="/diary/list">
-                    <p>일기 목록</p>
-                </a>
+                <a href="/diary/list">일기 목록</a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a href="/member/profile">
-                    <p sec:authentication="principal.member.name"></p>
-                </a>
+                <a href="/member/profile" sec:authentication="principal.member.name"></a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a href="/member/logout">
-                    <p>로그아웃</p>
-                </a>
+                <a href="/member/logout">로그아웃</a>
             </li>
         </ul>
     </nav>
