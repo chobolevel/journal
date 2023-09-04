@@ -19,10 +19,10 @@
         ${alias}id AS ${prefix}id
         , ${alias}username AS ${prefix}username
         , ${alias}password AS ${prefix}password
-        , ${alias}name AS ${prefix}name
+        , ${alias}`name` AS `${prefix}name`
         , ${alias}nickname AS ${prefix}nickname
         , ${alias}mobile AS ${prefix}mobile
-        , ${alias}role AS ${prefix}role
+        , ${alias}`role` AS `${prefix}role`
         , ${alias}resign_yn AS ${prefix}resign_yn
         , ${alias}create_date AS ${prefix}create_date
         , ${alias}update_date AS ${prefix}update_date
@@ -45,13 +45,19 @@
         </include>
         FROM member
         <where>
+            resign_yn = 'n'
             <if test="id != null and id != ''">
-                id = #{id}
+                AND id = #{id}
             </if>
             <if test="username != null and username != ''">
-                username = #{username}
+                AND username = #{username}
             </if>
-            AND resign_yn = 'n'
+            <if test="name != null and name != ''">
+                AND `name` = #{name}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                AND mobile = #{mobile}
+            </if>
         </where>
     </select>
 
