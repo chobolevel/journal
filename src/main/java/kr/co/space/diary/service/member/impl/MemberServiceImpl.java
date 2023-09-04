@@ -30,10 +30,11 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   public Member findOne(Member member) throws CustomException {
-    if(member.getId() == null || member.getId().isEmpty()) {
-      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
+    Member findMember = memberMapper.findOne(member);
+    if(findMember == null) {
+      throw new CustomException(CustomExceptionType.FAIL_TO_FIND);
     }
-    return memberMapper.findOne(member);
+    return findMember;
   }
 
   @Override

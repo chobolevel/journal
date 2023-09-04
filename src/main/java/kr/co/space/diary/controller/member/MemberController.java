@@ -39,6 +39,11 @@ public class MemberController {
     return "/member/modify";
   }
 
+  @GetMapping("find-username")
+  public String findUsername() {
+    return "/member/find-username";
+  }
+
   @GetMapping("change-password")
   public String changePassword() {
     return "/member/change-password";

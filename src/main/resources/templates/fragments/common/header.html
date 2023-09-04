@@ -1,7 +1,7 @@
 <html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<div th:fragment="headerFragment">
-    <h1>HEADER</h1>
-    <nav>
+<div class="header" th:fragment="headerFragment">
+    <p class="logo">나만의 일기</p>
+    <nav class="bottom-menu">
         <ul>
             <li>
                 <a href="/">홈</a>
@@ -13,19 +13,13 @@
                 <a href="/member/sign/up">회원가입</a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a href="/diary/list">
-                    <p>일기 목록</p>
-                </a>
+                <a href="/diary/list">일기 목록</a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a href="/member/profile">
-                    <p sec:authentication="principal.member.name"></p>
-                </a>
+                <a href="/member/profile" sec:authentication="principal.member.name"></a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a href="/member/logout">
-                    <p>로그아웃</p>
-                </a>
+                <a href="/member/logout">로그아웃</a>
             </li>
         </ul>
     </nav>

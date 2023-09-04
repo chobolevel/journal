@@ -4,16 +4,14 @@
   <meta charset="UTF-8">
   <script th:src="@{/js/jquery-3.7.0.min.js}"></script>
   <link rel="stylesheet" th:href="@{/css/basic.css}">
-  <link rel="stylesheet" th:href="@{/css/default_layout.css}">
+  <link rel="stylesheet" th:href="@{/css/anonymous_layout.css}">
   <link rel="icon" th:href="@{/img/favicon/favicon.ico}" type="image/x-icon">
 </head>
 <body>
 <div class="container">
-  <th:block th:replace="fragments/common/header :: headerFragment"></th:block>
 
   <section layout:fragment="content"></section>
 
-  <th:block th:replace="fragments/common/footer :: footerFragment"></th:block>
 </div>
 </body>
 </html>

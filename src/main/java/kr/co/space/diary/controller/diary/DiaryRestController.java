@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,20 +34,20 @@ public class DiaryRestController {
   private String basePath;
 
   @GetMapping("{id}")
-  public Diary fetch(@PathVariable("id") String id) throws CustomException {
-    return diaryService.findOne(Diary.builder().id(id).build());
+  public ResponseEntity<?> fetch(@PathVariable("id") String id) throws CustomException {
+    return new ResponseEntity<>(diaryService.findOne(Diary.builder().id(id).build()), HttpStatus.OK);
   }
 
   @GetMapping("list")
-  public Diaries search(Diaries diaries) throws CustomException {
+  public ResponseEntity<?> search(Diaries diaries) throws CustomException {
     List<Diary> diaryList = diaryService.findAll(diaries);
     diaries.setDiaryList(diaryList);
     diaries.setTotalCnt(diaryService.findCount());
-    return diaries;
+    return new ResponseEntity<>(diaries, HttpStatus.OK);
   }
 
   @PostMapping("write")
-  public HttpStatus write(@RequestPart("diary") Diary diary, @RequestPart("uploadFiles") List<MultipartFile> uploadFiles) throws CustomException, IOException {
+  public ResponseEntity<?> write(@RequestPart("diary") Diary diary, @RequestPart("uploadFiles") List<MultipartFile> uploadFiles) throws CustomException, IOException {
     String createdDiaryId = diaryService.create(diary);
 
     List<Attachment> attachmentList = uploadFiles.stream().map((file) -> new Attachment(createdDiaryId, file.getOriginalFilename())).toList();
@@ -58,20 +59,20 @@ public class DiaryRestController {
       file.transferTo(new File(String.format("%s\\%s", createdDiaryId, file.getOriginalFilename())));
     }
     attachmentService.create(attachmentList);
-    return HttpStatus.CREATED;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PutMapping("{id}")
-  public HttpStatus modify(@PathVariable("id") String id,
+  public ResponseEntity<?> modify(@PathVariable("id") String id,
                                   @RequestPart("diary") Diary diary,
                                   @RequestPart(value = "uploadFiles", required = false) List<MultipartFile> uploadFiles) throws CustomException {
     diary.setId(id);
     diaryService.modify(diary);
-    return HttpStatus.OK;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PutMapping("increase-view-cnt/{id}")
-  public HttpStatus increaseViewCnt(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("id") String id) throws CustomException {
+  public ResponseEntity<?> increaseViewCnt(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("id") String id) throws CustomException {
     String memberId = principalDetails.getMember().getId();
     String viewedDiaryIds = redisTemplate.opsForValue().get(memberId);
     List<String> viewedDiaryIdList = new ArrayList<>();
@@ -94,19 +95,19 @@ public class DiaryRestController {
         diaryService.increaseViewCnt(Diary.builder().id(id).build());
       }
     }
-    return HttpStatus.OK;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PutMapping("increase-like-cnt/{id}")
-  public HttpStatus increaseLikeCnt(@PathVariable("id") String id) throws CustomException {
+  public ResponseEntity<?> increaseLikeCnt(@PathVariable("id") String id) throws CustomException {
     diaryService.increaseLikeCnt(Diary.builder().id(id).build());
-    return HttpStatus.OK;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @DeleteMapping("{id}")
-  public HttpStatus remove(@PathVariable("id") String id) throws CustomException {
+  public ResponseEntity<?> remove(@PathVariable("id") String id) throws CustomException {
     diaryService.remove(Diary.builder().id(id).build());
-    return HttpStatus.OK;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
 }

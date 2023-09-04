@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko"
+      layout:decorate="~{layout/anonymous_layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title>나만의 일기 - 아이디 찾기</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+  <div class="form-area">
+    <p class="form-title">나만의 일기</p>
+    <form class="find-username-form">
+      <div class="input-area">
+        <input name="name" placeholder="이름을 입력하세요." type="text">
+      </div>
+      <div class="input-area">
+        <input name="mobile" placeholder="전화번호를 입력하세요" type="text">
+      </div>
+      <div class="button-area">
+        <button class="submit-btn">아이디 찾기</button>
+      </div>
+      <ul class="link-area">
+        <li>
+          <a href="/member/sign/in">로그인</a>
+        </li>
+        <li>
+          <a href="/member/sign/up">회원가입</a>
+        </li>
+      </ul>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>
+
+<script>
+  const $findUsernameForm = $('.find-username-form')
+  const $nameInput = $('input[name=name]')
+  const $mobileInput = $('input[name=mobile]')
+  const $submitBtn = $('.submit-btn')
+
+  $findUsernameForm.on('submit', (e) => {
+      e.preventDefault()
+      $.ajax({
+          url: `http://localhost:8080/api/member/find-username?name=${$nameInput.val()}&mobile=${$mobileInput.val()}`,
+          type: 'GET',
+          contentType: 'application/json',
+          success: (data) => {
+              console.log(data)
+              alert(`로그인에 사용된 아이디는 [${data.username}]입니다.`)
+              $nameInput.val('')
+              $mobileInput.val('')
+          },
+          error: (exception) => {
+              alert('회원정보가 존재하지 않습니다.')
+          }
+      })
+  })
+  $submitBtn.on('click', (e) => {
+      e.preventDefault()
+      $findUsernameForm.submit()
+  })
+</script>
