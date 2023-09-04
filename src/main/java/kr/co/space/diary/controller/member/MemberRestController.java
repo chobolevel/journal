@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("api/member")
 @RequiredArgsConstructor
@@ -26,6 +24,11 @@ public class MemberRestController {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "UserDetails", "principalDetails");
     }
     return new ResponseEntity<>(memberService.findOne(Member.builder().id(principalDetails.getMember().getId()).build()), HttpStatus.OK);
+  }
+
+  @GetMapping("find-username")
+  public ResponseEntity<?> findUsername(@RequestParam String name, @RequestParam String mobile) throws CustomException {
+    return new ResponseEntity<>(memberService.findOne(Member.builder().name(name).mobile(mobile).build()), HttpStatus.OK);
   }
 
   @GetMapping("list")
