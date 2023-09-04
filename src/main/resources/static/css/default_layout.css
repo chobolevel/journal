@@ -15,7 +15,7 @@
     height: 80px;
     padding: 0 40px;
     line-height: 60px;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
 }
 .header .bottom-menu {
@@ -26,6 +26,9 @@
 .header .bottom-menu li {
     display: inline;
     margin: 0 20px;
+}
+.header .bottom-menu li a:hover {
+    text-decoration: underline;
 }
 .footer {
     width: 70%;
@@ -58,11 +61,25 @@ section {
     border-bottom: 1px solid black;
 }
 .greeting {
-    margin: 50px auto;
+    margin: 150px auto;
     text-align: center;
 }
 .greeting p {
     margin: 40px;
     font-size: 20px;
     font-style: italic;
+}
+ /*global form style*/
+.form-area {
+    border: 1px solid red;
+}
+.form-area .form-title {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 30px 0;
+    text-align: center;
+    border: 1px solid black;
+}
+.form-area form {
+    border: 1px solid blue;
 }

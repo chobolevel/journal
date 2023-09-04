@@ -1,26 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko"
-      layout:decorate="~{layout/default_layout.html}"
+      layout:decorate="~{layout/anonymous_layout.html}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title>나만의 일기 - 로그인</title>
+  <title>나만의 일기 - 로그인</title>
 </head>
 <body>
 
 <section layout:fragment="content">
-    <h2>로그인</h2>
-    <p th:if="${error == true}" th:text="${errorMessage}"></p>
+  <div class="form-area">
+    <p class="form-title">나만의 일기</p>
     <form action="/member/sign/in" method="post">
-        <div>
-            <input name="username" placeholder="아이디" type="text">
-        </div>
-        <div>
-            <input name="password" placeholder="비밀번호" type="password">
-        </div>
+      <div class="input-area">
+        <input name="username" placeholder="아이디" type="text">
+      </div>
+      <div class="input-area">
+        <input name="password" placeholder="비밀번호" type="password">
+      </div>
+      <div class="button-area">
         <button>로그인</button>
-        <button>취소</button>
+      </div>
+      <ul class="link-area">
+        <li>
+          <a href="/member/sign/up">회원가입</a>
+        </li>
+        <li>
+          <a href="/member/find-username">아이디 찾기</a>
+        </li>
+      </ul>
     </form>
+  </div>
 </section>
 
 </body>
 </html>
+
+<script th:inline="javascript">
+  const error = [[${error}]]
+  const errorMessage = [[${errorMessage}]]
+
+  if(error) {
+      alert(errorMessage)
+  }
+</script>
