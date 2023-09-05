@@ -3,17 +3,26 @@
       layout:decorate="~{layout/default_layout.html}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title>나만의 일기 - 프로필</title>
+  <title>나만의 일기 - 프로필</title>
 </head>
 <body>
 
 <section layout:fragment="content">
-    <h2>내 정보</h2>
-    <p class="profile-name"></p>
-    <p class="profile-nickname"></p>
-    <button class="modify-btn">정보 수정</button>
-    <button class="change-password-btn">비밀번호 변경</button>
-    <button class="resign-btn">계정 탈퇴</button>
+  <div class="profile-area">
+    <p class="profile-title">프로필</p>
+    <div class="profile-inner">
+      <img class="profile-icon" th:src="@{/img/profile/profile-icon.png}">
+      <div class="profile-detail">
+        <p class="profile-name"></p>
+        <p class="profile-mobile"></p>
+      </div>
+    </div>
+    <div class="button-area">
+      <button class="modify-btn">정보 수정</button>
+      <button class="change-password-btn">비밀번호 변경</button>
+      <button class="resign-btn">계정 탈퇴</button>
+    </div>
+  </div>
 </section>
 
 </body>
@@ -31,8 +40,8 @@
         contentType: 'application/json',
         success: (data) => {
             memberId = data.id
-            $('.profile-name').text(data.name)
-            $('.profile-nickname').text(data.nickname)
+            $('.profile-name').text(`${data.name}(${data.nickname})`)
+            $('.profile-mobile').text(data.mobile)
         },
         error: () => {
             console.log('fail to load')
@@ -51,7 +60,7 @@
     })
     $resignBtn.on('click', (e) => {
         e.preventDefault()
-        if(confirm('정말 계정을 탈퇴하시겠습니까?')) {
+        if (confirm('정말 계정을 탈퇴하시겠습니까?')) {
             $.ajax({
                 url: `http://localhost:8080/api/member/${memberId}`,
                 type: 'DELETE',
