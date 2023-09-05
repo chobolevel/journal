@@ -47,19 +47,22 @@ public class DiaryRestController {
   }
 
   @PostMapping("write")
-  public ResponseEntity<?> write(@RequestPart("diary") Diary diary, @RequestPart("uploadFiles") List<MultipartFile> uploadFiles) throws CustomException, IOException {
+  public ResponseEntity<?> write(@RequestPart("diary") Diary diary, @RequestPart(value = "uploadFiles", required = false) List<MultipartFile> uploadFiles) throws CustomException, IOException {
     String createdDiaryId = diaryService.create(diary);
 
-    List<Attachment> attachmentList = uploadFiles.stream().map((file) -> new Attachment(createdDiaryId, file.getOriginalFilename())).toList();
+    if(uploadFiles != null) {
+      List<Attachment> attachmentList = uploadFiles.stream().map((file) -> new Attachment(createdDiaryId, file.getOriginalFilename())).toList();
 
-    // 글 별로 폴더를 생성하고 해당 폴더로 분리해서 이미지 저장
-    File folder = new File(basePath + "\\" + createdDiaryId);
-    folder.mkdir();
-    for(MultipartFile file : uploadFiles) {
-      file.transferTo(new File(String.format("%s\\%s", createdDiaryId, file.getOriginalFilename())));
+      // 글 별로 폴더를 생성하고 해당 폴더로 분리해서 이미지 저장
+      File folder = new File(basePath + "\\" + createdDiaryId);
+      folder.mkdir();
+      for(MultipartFile file : uploadFiles) {
+        file.transferTo(new File(String.format("%s\\%s", createdDiaryId, file.getOriginalFilename())));
+      }
+      attachmentService.create(attachmentList);
     }
-    attachmentService.create(attachmentList);
-    return new ResponseEntity<>(HttpStatus.OK);
+
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @PutMapping("{id}")
