@@ -57,8 +57,7 @@
 }
 section {
     padding: 20px;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+    background-color: #eee;
 }
 .greeting {
     margin: 150px auto;
@@ -113,15 +112,66 @@ section {
     font-size: 20px;
     font-weight: bold;
 }
-.profile-area .button-area {
+/*모든 버튼 영역 스타일*/
+.button-area {
     padding: 10px;
     text-align: right;
 }
-.profile-area .button-area button {
+.button-area button {
     padding: 6px 10px;
     background-color: #ff8027;
     color: #fff;
     border: none;
     border-radius: 10px;
     margin: 0 10px;
+}
+.diary-list-area {
+    padding: 20px;
+}
+.diary-list-area .diary-list-title {
+    padding: 20px;
+    font-size: 26px;
+    font-weight: bold;
+}
+.diary-list-area .diary-list-table {
+    width: 100%;
+    margin: 20px 0;
+}
+.diary-list-area .diary-list-table thead tr th {
+    font-weight: bold;
+    padding: 14px;
+    border: 2px solid #ff8027;
+}
+.diary-list-area .diary-list-table tbody tr td {
+    padding: 10px;
+    text-align: center;
+    border: 2px solid #ff8027;
+}
+.diary-list-area .diary-list-table thead tr th:first-child {
+    width: 60%;
+}
+.diary-list-area .diary-list-table thead tr th:nth-child(2) {
+    width: 20%;
+}
+.diary-list-area .diary-list-table thead tr th:nth-child(3), .diary-list-area .diary-list-table thead tr th:nth-child(4) {
+     width: 10%;
+ }
+.diary-list-area .paging-area {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.diary-list-area .paging-numbers {
+    display: flex;
+    flex-direction: row;
+}
+.diary-list-area .paging-numbers li {
+    margin: 0 10px;
+}
+.diary-list-area .paging-area .paging-numbers li:hover {
+    cursor: pointer;
+}
+.diary-list-area .prev-btn span:hover, .diary-list-area .next-btn span:hover {
+    cursor: pointer;
 }
