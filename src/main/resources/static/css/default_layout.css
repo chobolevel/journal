@@ -83,3 +83,45 @@ section {
 .form-area form {
     border: 1px solid blue;
 }
+/*profile style*/
+.profile-area {
+    padding: 20px;
+}
+.profile-area .profile-title {
+    padding: 20px;
+    font-size: 26px;
+    font-weight: bold;
+}
+.profile-area .profile-inner {
+    display: flex;
+    flex-direction: row;
+}
+.profile-area .profile-inner .profile-icon {
+    width: 20%;
+}
+.profile-area .profile-inner .profile-detail {
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.profile-area .profile-inner .profile-detail p {
+    margin: 20px;
+}
+.profile-area .profile-inner .profile-detail p:first-child {
+    font-size: 20px;
+    font-weight: bold;
+}
+.profile-area .button-area {
+    padding: 10px;
+    text-align: right;
+}
+.profile-area .button-area button {
+    padding: 6px 10px;
+    background-color: #ff8027;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    margin: 0 10px;
+}
