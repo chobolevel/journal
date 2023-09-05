@@ -73,8 +73,13 @@
                 alert('일기 저장 성공')
                 location.href = '/diary/list'
             },
-            error: () => {
-                alert('일기 저장 실패')
+            error: (request, status, error) => {
+                if(request.status === 201) {
+                    alert('일기 저장 성공')
+                    location.href = '/diary/list'
+                } else {
+                    alert('일기 저장 실패')
+                }
             }
         })
     })
