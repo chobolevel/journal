@@ -51,6 +51,9 @@ public class MemberServiceImpl implements MemberService {
     else if(member.getNickname() == null || member.getNickname().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "nickname");
     }
+    else if(member.getMobile() == null || member.getMobile().isEmpty()) {
+      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "mobile");
+    }
     member.setId(UUID.randomUUID().toString());
     member.setPassword(passwordEncoder.encode(member.getPassword()));
     member.setRole(MemberRoleType.ROLE_USER);

@@ -26,6 +26,9 @@
       <div class="input-area">
         <input name="nickname" placeholder="닉네임" type="text">
       </div>
+      <div class="input-area">
+        <input name="mobile" placeholder="전화번호(하이픈 포함)" type="text">
+      </div>
       <div class="button-area">
         <button class="submit-btn">회원가입</button>
       </div>
@@ -48,6 +51,7 @@
     const $passwordCheckInput = $('input[name=passwordCheck]')
     const $nameInput = $('input[name=name]')
     const $nicknameInput = $('input[name=nickname]')
+    const $mobileInput = $('input[name=mobile]')
     const $submitBtn = $('.submit-btn')
     const $cancelBtn = $('.cancel-btn')
 
@@ -66,15 +70,21 @@
                     username: $usernameInput.val(),
                     password: $passwordInput.val(),
                     name: $nameInput.val(),
-                    nickname: $nicknameInput.val()
+                    nickname: $nicknameInput.val(),
+                    mobile: $mobileInput.val()
                 }),
                 success: () => {
                     alert('회원가입 성공!')
                     location.href = '/member/sign/in'
                 },
                 error: (request, status, error) => {
-                    alert('회원 가입 실패')
-                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                    // console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                    if(request.status === 201) {
+                        alert('회원가입 성공!')
+                        location.href = '/member/sign/in'
+                    } else {
+                        alert('회원 가입 실패')
+                    }
                 }
             })
         }
