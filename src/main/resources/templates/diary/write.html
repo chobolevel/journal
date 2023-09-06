@@ -3,25 +3,31 @@
       layout:decorate="~{layout/default_layout.html}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title>나만의 일기 - 일기 작성</title>
+  <title>나만의 일기 - 일기 작성</title>
 </head>
 <body>
 
 <section layout:fragment="content">
-    <h2>일기를 작성하세요</h2>
+  <div class="form-area">
+    <p class="form-title">일기 작성</p>
     <form class="write-form">
-        <div>
-            <input name="title" placeholder="제목" type="text">
-        </div>
-        <div>
-            <textarea name="content" placeholder="내용을 입력하세요.."></textarea>
-        </div>
-        <div>
-            <input multiple="multiple" name="uploadFiles" type="file">
-        </div>
+      <div class="input-area">
+        <input name="title" placeholder="제목" type="text">
+      </div>
+      <div class="text-area">
+        <textarea name="content" placeholder="내용을 입력해보세요!"></textarea>
+      </div>
+      <div class="upload-area">
+        <label for="uploadFiles">파일 첨부</label>
+        <input id="uploadFiles" multiple="multiple" name="uploadFiles" type="file">
+        <ul class="upload-file-names"></ul>
+      </div>
+      <div class="button-area">
         <button class="submit-btn">저장하기</button>
         <button class="cancel-btn">작성취소</button>
+      </div>
     </form>
+  </div>
 </section>
 
 </body>
@@ -32,6 +38,7 @@
     const $titleInput = $('input[name=title]')
     const $contentTextarea = $('textarea[name=content]')
     const $uploadFiles = $('input[name=uploadFiles]')
+    const $uploadFileNames = $('.upload-file-names')
     const $submitBtn = $('.submit-btn')
     const $cancelBtn = $('.cancel-btn')
     let user = {}
@@ -56,7 +63,7 @@
             content: $contentTextarea.val(),
             writerId: user.id
         }
-        formData.append('diary', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+        formData.append('diary', new Blob([JSON.stringify(data)], {type: 'application/json'}))
         Array.from($uploadFiles[0].files).forEach((file) => {
             formData.append('uploadFiles', file)
         })
@@ -74,7 +81,7 @@
                 location.href = '/diary/list'
             },
             error: (request, status, error) => {
-                if(request.status === 201) {
+                if (request.status === 201) {
                     alert('일기 저장 성공')
                     location.href = '/diary/list'
                 } else {
@@ -90,5 +97,13 @@
     $cancelBtn.on('click', (e) => {
         e.preventDefault()
         location.href = '/diary/list'
+    })
+    $uploadFiles.on('change', (e) => {
+        e.preventDefault()
+        const files = $uploadFiles[0].files
+        $uploadFileNames.children().remove()
+        Array.from(files).forEach((file) => {
+            $uploadFileNames.append(`<li>${file.name}</li>`)
+        })
     })
 </script>
