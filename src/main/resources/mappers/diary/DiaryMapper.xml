@@ -20,7 +20,7 @@
                      columnPrefix="m_"
                      resultMap="kr.co.space.diary.mapper.member.MemberMapper.BaseResultMap"/>
         <collection property="attachmentList"
-                    javaType="List"
+                    javaType="java.util.List"
                     ofType="Attachment"
                     columnPrefix="a_"
                     resultMap="kr.co.space.diary.mapper.attachment.AttachmentMapper.BaseResultMap"/>
@@ -54,7 +54,7 @@
             <property name="prefix" value="m_"/>
         </include>
         FROM diary AS d
-        LEFT OUTER JOIN member AS m
+        LEFT JOIN member AS m
             ON d.writer_id = m.id
         ORDER BY d.create_date DESC
         LIMIT #{offset}, ${limit}
