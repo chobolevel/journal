@@ -31,13 +31,8 @@ public class DiaryController {
   }
 
   @GetMapping("")
-  public String watch() {
-    return "/diary/watch";
-  }
-
-  @GetMapping("modify")
   public String modify() throws CustomException {
-    return "/diary/modify";
+    return "/diary/watch";
   }
 
 }

@@ -8,25 +8,29 @@
 <body>
 
 <section layout:fragment="content">
-    <h2>일기 목록</h2>
-    <button class="write-btn">글 쓰기</button>
-    <table>
-        <thead>
-        <tr>
-            <th>제 목</th>
-            <th>작성자</th>
-            <th>조회수</th>
-            <th>좋아요</th>
-        </tr>
-        </thead>
-        <tbody class="diary-list">
-        </tbody>
-    </table>
-    <div class="paging-area">
-        <div class="prev-btn"></div>
-        <ul class="paging-numbers">
-        </ul>
-        <div class="next-btn"></div>
+    <div class="diary-list-area">
+        <p class="diary-list-title">일기 목록</p>
+        <table class="diary-list-table">
+            <thead>
+            <tr>
+                <th>제 목</th>
+                <th>작성자</th>
+                <th>조회수</th>
+                <th>좋아요</th>
+            </tr>
+            </thead>
+            <tbody class="diary-list">
+            </tbody>
+        </table>
+        <div class="paging-area">
+            <div class="prev-btn"></div>
+            <ul class="paging-numbers">
+            </ul>
+            <div class="next-btn"></div>
+        </div>
+        <div class="button-area">
+            <button class="write-btn">글 쓰기</button>
+        </div>
     </div>
 </section>
 

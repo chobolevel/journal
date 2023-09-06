@@ -1,15 +1,21 @@
 package kr.co.space.diary.service.diary.impl;
 
+import kr.co.space.diary.entity.attachment.Attachment;
 import kr.co.space.diary.entity.diary.Diaries;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.enums.common.CustomExceptionType;
 import kr.co.space.diary.exception.CustomException;
+import kr.co.space.diary.mapper.attachment.AttachmentMapper;
 import kr.co.space.diary.mapper.diary.DiaryMapper;
 import kr.co.space.diary.service.diary.DiaryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +25,9 @@ import java.util.UUID;
 public class DiaryServiceImpl implements DiaryService {
 
   private final DiaryMapper diaryMapper;
+  private final AttachmentMapper attachmentMapper;
+  @Value("${spring.servlet.multipart.location}")
+  private String basePath;
 
   @Override
   public int findCount() {
@@ -39,7 +48,7 @@ public class DiaryServiceImpl implements DiaryService {
   }
 
   @Override
-  public String create(Diary diary) throws CustomException {
+  public void create(Diary diary, List<MultipartFile> uploadFiles) throws CustomException, IOException {
     if(diary.getTitle() == null || diary.getTitle().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "title");
     }
@@ -49,9 +58,21 @@ public class DiaryServiceImpl implements DiaryService {
     else if(diary.getWriterId() == null || diary.getWriterId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "writer");
     }
-    diary.setId(UUID.randomUUID().toString());
+    String diaryId = UUID.randomUUID().toString();
+    diary.setId(diaryId);
+
+    if(uploadFiles != null) {
+      List<Attachment> list = uploadFiles.stream().map((file) -> new Attachment(diaryId, file.getOriginalFilename())).toList();
+      // 글 별로 폴더를 생성하고 해당 폴더로 분리해서 이미지 저장
+      File folder = new File(basePath + "\\" + diaryId);
+      folder.mkdir();
+      for(MultipartFile file : uploadFiles) {
+        file.transferTo(new File(String.format("%s\\%s", diaryId, file.getOriginalFilename())));
+      }
+      attachmentMapper.create(list);
+    }
+
     diaryMapper.create(diary);
-    return diary.getId();
   }
 
   @Override
