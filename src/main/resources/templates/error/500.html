@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko"
+      layout:decorate="~{layout/default_layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title>나만의 일기 - 500</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+  <div class="error-notice-area">
+    <p class="error-title">서버 에러 발생</p>
+    <p class="error-desc">현재 정상 동작이 어려우므로 다음에 이용해 주시기 바랍니다.</p>
+    <button class="home-btn">홈으로 이동</button>
+  </div>
+</section>
+
+</body>
+</html>
+
+<script>
+    const $homeBtn = $('.home-btn')
+
+    $homeBtn.on('click', (e) => {
+        e.preventDefault()
+        location.href = '/'
+    })
+</script>
