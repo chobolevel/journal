@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.space.diary.mapper.attachment.AttachmentMapper">
 
     <resultMap id="BaseResultMap" type="Attachment">
-        <id column="diary_id" property="diaryId"/>
+        <result column="diary_id" property="diaryId"/>
         <result column="file_name" property="fileName"/>
         <result column="create_date" property="createDate"/>
         <result column="update_date" property="updateDate"/>
