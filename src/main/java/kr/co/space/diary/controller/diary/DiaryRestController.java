@@ -1,14 +1,11 @@
 package kr.co.space.diary.controller.diary;
 
 import kr.co.space.diary.config.security.principal.PrincipalDetails;
-import kr.co.space.diary.entity.attachment.Attachment;
 import kr.co.space.diary.entity.diary.Diaries;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.exception.CustomException;
-import kr.co.space.diary.service.attachment.AttachmentService;
 import kr.co.space.diary.service.diary.DiaryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +23,7 @@ import java.util.List;
 public class DiaryRestController {
 
   private final DiaryService diaryService;
-  private final AttachmentService attachmentService;
   private final RedisTemplate<String, String> redisTemplate;
-
-  @Value("${spring.servlet.multipart.location}")
-  private String basePath;
 
   @GetMapping("{id}")
   public ResponseEntity<?> fetch(@PathVariable("id") String id) throws CustomException {
@@ -48,20 +40,7 @@ public class DiaryRestController {
 
   @PostMapping("write")
   public ResponseEntity<?> write(@RequestPart("diary") Diary diary, @RequestPart(value = "uploadFiles", required = false) List<MultipartFile> uploadFiles) throws CustomException, IOException {
-    String createdDiaryId = diaryService.create(diary);
-
-    if(uploadFiles != null) {
-      List<Attachment> attachmentList = uploadFiles.stream().map((file) -> new Attachment(createdDiaryId, file.getOriginalFilename())).toList();
-
-      // 글 별로 폴더를 생성하고 해당 폴더로 분리해서 이미지 저장
-      File folder = new File(basePath + "\\" + createdDiaryId);
-      folder.mkdir();
-      for(MultipartFile file : uploadFiles) {
-        file.transferTo(new File(String.format("%s\\%s", createdDiaryId, file.getOriginalFilename())));
-      }
-      attachmentService.create(attachmentList);
-    }
-
+    diaryService.create(diary, uploadFiles);
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
