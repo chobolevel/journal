@@ -123,6 +123,7 @@ section {
     background-color: #ff8027;
     color: #fff;
     padding: 6px 10px;
+    border-radius: 10px;
 }
 .form-area form .upload-area label:hover {
     cursor: pointer;
@@ -133,6 +134,10 @@ section {
 }
 .form-area form .upload-area .upload-file-names li {
     margin: 10px 0;
+}
+.form-area form .upload-area .upload-file-names li span:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 /*profile style*/
 .profile-area {
