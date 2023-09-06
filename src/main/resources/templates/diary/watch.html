@@ -54,7 +54,12 @@
             $titleInput.val(data.title)
             $contentTextarea.val(data.content)
             data.attachmentList.forEach((attachment) => {
-                $uploadFileNames.append(`<li>${attachment.fileName}</li>`)
+                const $li = $(`<li><span>${attachment.fileName}</span></li>`)
+                $li.on('click', (e) => {
+                    e.preventDefault()
+                    location.href = `http://localhost:8080/api/attachment/${data.id}/${attachment.fileName}`
+                })
+                $uploadFileNames.append($li)
             })
         },
         error: () => {
