@@ -54,6 +54,13 @@ public class MemberServiceImpl implements MemberService {
     else if(member.getMobile() == null || member.getMobile().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "mobile");
     }
+
+    Member sameUsernameMember = memberMapper.findOne(Member.builder().username(member.getUsername()).build());
+
+    if(sameUsernameMember != null) {
+      throw new CustomException(CustomExceptionType.SAME_USERNAME_EXISTS);
+    }
+
     member.setId(UUID.randomUUID().toString());
     member.setPassword(passwordEncoder.encode(member.getPassword()));
     member.setRole(MemberRoleType.ROLE_USER);
