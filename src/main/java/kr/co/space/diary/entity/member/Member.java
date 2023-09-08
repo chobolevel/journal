@@ -24,4 +24,6 @@ public class Member extends Base {
     private MemberRoleType role;
     private String resignYn;
 
+    private boolean isUsernameExists;
+
 }
