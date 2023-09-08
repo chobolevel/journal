@@ -10,7 +10,7 @@
 <section layout:fragment="content">
   <div class="form-area">
     <p class="form-title">나만의 일기</p>
-    <form action="/member/sign/in" method="post">
+    <form action="/member/sign/in" class="sign-in-form" method="post">
       <div class="input-area">
         <input name="username" placeholder="아이디" type="text">
       </div>
@@ -18,7 +18,7 @@
         <input name="password" placeholder="비밀번호" type="password">
       </div>
       <div class="button-area">
-        <button>로그인</button>
+        <button class="submit-btn">로그인</button>
       </div>
       <ul class="link-area">
         <li>
@@ -38,6 +38,24 @@
 <script th:inline="javascript">
   const error = [[${error}]]
   const errorMessage = [[${errorMessage}]]
+  const $signInForm = $('.sign-in-form')
+  const $usernameInput = $('input[name=username]')
+  const $passwordInput = $('input[name=password]')
+  const $submitBtn = $('.submit-btn')
+
+  $submitBtn.on('click', (e) => {
+      e.preventDefault()
+      if($usernameInput.val().length === 0) {
+          alert('아이디가 입력되지 않았습니다.')
+      }
+      else if($passwordInput.val().length === 0) {
+          alert('비밀번호가 입력되지 않았습니다.')
+      }
+      else {
+          $signInForm.submit()
+      }
+  })
+
 
   if(error) {
       alert(errorMessage)
