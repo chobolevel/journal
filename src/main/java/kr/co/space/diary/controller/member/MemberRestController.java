@@ -27,8 +27,18 @@ public class MemberRestController {
   }
 
   @GetMapping("find-username")
-  public ResponseEntity<?> findUsername(@RequestParam String name, @RequestParam String mobile) throws CustomException {
-    return new ResponseEntity<>(memberService.findOne(Member.builder().name(name).mobile(mobile).build()), HttpStatus.OK);
+  public ResponseEntity<?> findUsername(@RequestParam String name, @RequestParam String email) throws CustomException {
+    return new ResponseEntity<>(memberService.findOne(Member.builder().name(name).email(email).build()), HttpStatus.OK);
+  }
+
+  @GetMapping("check-username")
+  public ResponseEntity<?> checkUsername(@RequestParam String username) throws CustomException {
+    Member findMember = memberService.findOne(Member.builder().username(username).build());
+    if(findMember != null) {
+      return new ResponseEntity<>(Member.builder().isUsernameExists(true).build(), HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(Member.builder().isUsernameExists(false).build(), HttpStatus.OK);
+    }
   }
 
   @GetMapping("list")

@@ -30,11 +30,7 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   public Member findOne(Member member) throws CustomException {
-    Member findMember = memberMapper.findOne(member);
-    if(findMember == null) {
-      throw new CustomException(CustomExceptionType.FAIL_TO_FIND);
-    }
-    return findMember;
+    return memberMapper.findOne(member);
   }
 
   @Override
@@ -51,8 +47,8 @@ public class MemberServiceImpl implements MemberService {
     else if(member.getNickname() == null || member.getNickname().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "nickname");
     }
-    else if(member.getMobile() == null || member.getMobile().isEmpty()) {
-      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "mobile");
+    else if(member.getEmail() == null || member.getEmail().isEmpty()) {
+      throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "email");
     }
 
     Member sameUsernameMember = memberMapper.findOne(Member.builder().username(member.getUsername()).build());

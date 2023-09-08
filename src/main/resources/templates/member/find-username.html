@@ -15,7 +15,7 @@
         <input name="name" placeholder="이름을 입력하세요." type="text">
       </div>
       <div class="input-area">
-        <input name="mobile" placeholder="전화번호를 입력하세요" type="text">
+        <input name="email" placeholder="이메일을 입력하세요" type="text">
       </div>
       <div class="button-area">
         <button class="submit-btn">아이디 찾기</button>
@@ -38,20 +38,20 @@
 <script>
   const $findUsernameForm = $('.find-username-form')
   const $nameInput = $('input[name=name]')
-  const $mobileInput = $('input[name=mobile]')
+  const $emailInput = $('input[name=email]')
   const $submitBtn = $('.submit-btn')
 
   $findUsernameForm.on('submit', (e) => {
       e.preventDefault()
       $.ajax({
-          url: `http://localhost:8080/api/member/find-username?name=${$nameInput.val()}&mobile=${$mobileInput.val()}`,
+          url: `http://localhost:8080/api/member/find-username?name=${$nameInput.val()}&email=${$emailInput.val()}`,
           type: 'GET',
           contentType: 'application/json',
           success: (data) => {
               console.log(data)
               alert(`로그인에 사용된 아이디는 [${data.username}]입니다.`)
               $nameInput.val('')
-              $mobileInput.val('')
+              $emailInput.val('')
           },
           error: (exception) => {
               alert('회원정보가 존재하지 않습니다.')
