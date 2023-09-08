@@ -27,7 +27,7 @@
         <input name="nickname" placeholder="닉네임" type="text">
       </div>
       <div class="input-area">
-        <input name="mobile" placeholder="전화번호(하이픈 포함)" type="text">
+        <input name="email" placeholder="이메일(비밀번호를 찾는데 사용됩니다.)" type="text">
       </div>
       <div class="button-area">
         <button class="submit-btn">회원가입</button>
@@ -51,7 +51,7 @@
     const $passwordCheckInput = $('input[name=passwordCheck]')
     const $nameInput = $('input[name=name]')
     const $nicknameInput = $('input[name=nickname]')
-    const $mobileInput = $('input[name=mobile]')
+    const $emailInput = $('input[name=email]')
     const $submitBtn = $('.submit-btn')
     const $cancelBtn = $('.cancel-btn')
     let isUsernameExists = false
@@ -71,7 +71,7 @@
                     password: $passwordInput.val(),
                     name: $nameInput.val(),
                     nickname: $nicknameInput.val(),
-                    mobile: $mobileInput.val()
+                    email: $emailInput.val()
                 }),
                 success: () => {
                     alert('회원가입 성공!')
@@ -90,7 +90,6 @@
         }
     })
     $submitBtn.on('click', (e) => {
-        const mobileReg = /\d{3}-\d{4}-\d{4}/
         const korReg = /^[가-힣]+$/
         e.preventDefault()
         if($usernameInput.val().length === 0) {
@@ -116,11 +115,8 @@
         } else if($nicknameInput.val().length === 0) {
             alert('사용할 닉네임이 입력되지 않았습니다.')
             $nicknameInput.focus()
-        } else if($mobileInput.val().length === 0) {
-            alert('전화번호가 입력되지 않았습니다.')
-            $mobileInput.focus()
-        } else if(!mobileReg.test($mobileInput.val())) {
-            alert('전화번호는 반드시 하이픈을 포함한 형태만 가능합니다\n예)010-1234-5678')
+        } else if($emailInput.val().length === 0) {
+            alert('이메일이 입력되지 않았습니다.')
             $mobileInput.focus()
         } else {
           $signUpForm.submit()

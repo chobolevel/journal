@@ -27,8 +27,8 @@ public class MemberRestController {
   }
 
   @GetMapping("find-username")
-  public ResponseEntity<?> findUsername(@RequestParam String name, @RequestParam String mobile) throws CustomException {
-    return new ResponseEntity<>(memberService.findOne(Member.builder().name(name).mobile(mobile).build()), HttpStatus.OK);
+  public ResponseEntity<?> findUsername(@RequestParam String name, @RequestParam String email) throws CustomException {
+    return new ResponseEntity<>(memberService.findOne(Member.builder().name(name).email(email).build()), HttpStatus.OK);
   }
 
   @GetMapping("check-username")

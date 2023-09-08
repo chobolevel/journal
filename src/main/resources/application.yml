@@ -37,8 +37,11 @@ spring:
     properties:
       mail:
         smtp:
+          # 사용자 인증 시도 여부(default = false)
           auth: true
+          # Socket read timeout 5000ms(default = 무한)
           timeout: 5000
+          # startTLS 활성화 여부(default = false)
           starttls:
             enable: true
 # mybatis config

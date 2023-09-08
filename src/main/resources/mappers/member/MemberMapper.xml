@@ -8,7 +8,7 @@
         <result column="password" property="password"/>
         <result column="name" property="name"/>
         <result column="nickname" property="nickname"/>
-        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
         <result column="role" property="role"/>
         <result column="resign_yn" property="resignYn"/>
         <result column="create_date" property="createDate"/>
@@ -21,7 +21,7 @@
         , ${alias}password AS ${prefix}password
         , ${alias}`name` AS `${prefix}name`
         , ${alias}nickname AS ${prefix}nickname
-        , ${alias}mobile AS ${prefix}mobile
+        , ${alias}email AS ${prefix}email
         , ${alias}`role` AS `${prefix}role`
         , ${alias}resign_yn AS ${prefix}resign_yn
         , ${alias}create_date AS ${prefix}create_date
@@ -55,16 +55,16 @@
             <if test="name != null and name != ''">
                 AND `name` = #{name}
             </if>
-            <if test="mobile != null and mobile != ''">
-                AND mobile = #{mobile}
+            <if test="email != null and email != ''">
+                AND email = #{email}
             </if>
         </where>
     </select>
 
     <insert id="create" parameterType="Member">
         INSERT INTO
-        member (id, username, password, name, nickname, mobile, role)
-        VALUES (#{id}, #{username}, #{password}, #{name}, #{nickname}, #{mobile}, #{role})
+        member (id, username, password, name, nickname, email, role)
+        VALUES (#{id}, #{username}, #{password}, #{name}, #{nickname}, #{email}, #{role})
     </insert>
 
     <update id="modify" parameterType="Member">
@@ -82,8 +82,8 @@
         <if test="nickname != null and nickname != ''">
             , nickname = #{nickname}
         </if>
-        <if test="mobile != null and mobile != ''">
-            , mobile = #{mobile}
+        <if test="email != null and email != ''">
+            , email = #{email}
         </if>
         <if test="role != null and role != ''">
             , role = #{role}
