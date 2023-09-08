@@ -54,10 +54,10 @@
     const $mobileInput = $('input[name=mobile]')
     const $submitBtn = $('.submit-btn')
     const $cancelBtn = $('.cancel-btn')
+    let isUsernameExists = false
 
     $signUpForm.on('submit', (e) => {
         e.preventDefault()
-        // TODO 특수문자, 길이 등 검증 필요
         if ($passwordInput.val() !== $passwordCheckInput.val()) {
             alert('비밀번호가 일치하지 않습니다.')
         } else {
@@ -90,11 +90,58 @@
         }
     })
     $submitBtn.on('click', (e) => {
+        const mobileReg = /\d{3}-\d{4}-\d{4}/
+        const korReg = /^[가-힣]+$/
         e.preventDefault()
-        $signUpForm.submit()
+        if($usernameInput.val().length === 0) {
+            alert('아이디가 입력되지 않았습니다.')
+            $usernameInput.focus()
+        } else if(isUsernameExists) {
+            alert('이미 존재하는 아이디입니다.\n다른 아이디를 사용해주시기 바랍니다.')
+            $usernameInput.focus()
+        } else if($passwordInput.val().length === 0) {
+            alert('비밀번호가 입력되지 않았습니다.')
+            $passwordInput.focus()
+        } else if($passwordCheckInput.val().length === 0) {
+            alert('확인 비밀번호가 입력되지 않았습니다.')
+            $passwordCheckInput.focus()
+        } else if($passwordInput.val() !== $passwordCheckInput.val()) {
+            alert('비밀번호가 일치하지 않습니다.')
+        } else if($nameInput.val().length === 0) {
+            alert('이름이 입력되지 않았습니다.')
+            $nameInput.focus()
+        } else if(!korReg.test($nameInput.val())) {
+            alert('이름은 반드시 한글로 입력해주시기 바랍니다.')
+            $nameInput.focus()
+        } else if($nicknameInput.val().length === 0) {
+            alert('사용할 닉네임이 입력되지 않았습니다.')
+            $nicknameInput.focus()
+        } else if($mobileInput.val().length === 0) {
+            alert('전화번호가 입력되지 않았습니다.')
+            $mobileInput.focus()
+        } else if(!mobileReg.test($mobileInput.val())) {
+            alert('전화번호는 반드시 하이픈을 포함한 형태만 가능합니다\n예)010-1234-5678')
+            $mobileInput.focus()
+        } else {
+          $signUpForm.submit()
+        }
     })
     $cancelBtn.on('click', (e) => {
         e.preventDefault()
         location.href = '/'
+    })
+    $usernameInput.on('change', (e) => {
+        e.preventDefault()
+        $.ajax({
+            url: `http://localhost:8080/api/member/check-username?username=${$usernameInput.val()}`,
+            type: 'GET',
+            contentType: 'application/json',
+            success: (data) => {
+                isUsernameExists = data.usernameExists
+            },
+            error: (request, status, error) => {
+                console.log(request)
+            }
+        })
     })
 </script>
