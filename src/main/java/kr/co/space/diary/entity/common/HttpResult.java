@@ -18,4 +18,8 @@ public class HttpResult {
     return HttpResult.builder().statusCode(HttpStatus.OK).statusText(HttpStatus.OK.getReasonPhrase()).message(message).build();
   }
 
+  public static HttpResult create(String message) {
+    return HttpResult.builder().statusCode(HttpStatus.CREATED).statusText(HttpStatus.CREATED.getReasonPhrase()).message(message).build();
+  }
+
 }

@@ -52,21 +52,21 @@ public class MemberRestController {
   @PostMapping("/sign/up")
   public ResponseEntity<?> signUp(@RequestBody Member member) throws CustomException {
     memberService.create(member);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    return new ResponseEntity<>(HttpResult.create("success to create member"), HttpStatus.CREATED);
   }
 
   @PutMapping("{id}")
   public ResponseEntity<?> modify(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
     member.setId(id);
     memberService.modify(member);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.ok(HttpResult.ok("success to modify member"));
   }
 
   @PutMapping("change-password/{id}")
   public ResponseEntity<?> changePassword(@PathVariable("id") String id, @RequestBody Member member) throws CustomException {
     member.setId(id);
     memberService.changePassword(member);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.ok(HttpResult.ok("success to change password"));
   }
 
   @PutMapping("init-password")
@@ -78,7 +78,7 @@ public class MemberRestController {
   @DeleteMapping("{id}")
   public ResponseEntity<?> resign(@PathVariable("id") String id) throws CustomException {
     memberService.resign(Member.builder().id(id).build());
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.ok(HttpResult.ok("success to resign member"));
   }
 
 }
