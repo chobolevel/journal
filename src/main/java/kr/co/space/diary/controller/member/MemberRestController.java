@@ -1,6 +1,7 @@
 package kr.co.space.diary.controller.member;
 
 import kr.co.space.diary.config.security.principal.PrincipalDetails;
+import kr.co.space.diary.entity.common.HttpResult;
 import kr.co.space.diary.entity.member.Member;
 import kr.co.space.diary.enums.common.CustomExceptionType;
 import kr.co.space.diary.exception.CustomException;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping("api/member")
@@ -64,6 +67,12 @@ public class MemberRestController {
     member.setId(id);
     memberService.changePassword(member);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PutMapping("init-password")
+  public ResponseEntity<?> initPassword(@RequestBody Member member) throws CustomException, MessagingException {
+    memberService.initPassword(member);
+    return ResponseEntity.ok(HttpResult.ok("success to init password"));
   }
 
   @DeleteMapping("{id}")
