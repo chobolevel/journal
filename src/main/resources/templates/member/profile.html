@@ -14,7 +14,7 @@
       <img class="profile-icon" th:src="@{/img/profile/profile-icon.png}">
       <div class="profile-detail">
         <p class="profile-name"></p>
-        <p class="profile-mobile"></p>
+        <p class="profile-email"></p>
       </div>
     </div>
     <div class="button-area">
@@ -41,7 +41,7 @@
         success: (data) => {
             memberId = data.id
             $('.profile-name').text(`${data.name}(${data.nickname})`)
-            $('.profile-mobile').text(data.mobile)
+            $('.profile-email').text(data.email)
         },
         error: () => {
             console.log('fail to load')

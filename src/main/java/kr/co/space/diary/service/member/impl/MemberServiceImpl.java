@@ -1,5 +1,6 @@
 package kr.co.space.diary.service.member.impl;
 
+import kr.co.space.diary.entity.common.Mail;
 import kr.co.space.diary.entity.member.Member;
 import kr.co.space.diary.enums.common.CustomExceptionType;
 import kr.co.space.diary.enums.member.MemberResignType;
@@ -7,11 +8,14 @@ import kr.co.space.diary.enums.member.MemberRoleType;
 import kr.co.space.diary.exception.CustomException;
 import kr.co.space.diary.mapper.member.MemberMapper;
 import kr.co.space.diary.service.member.MemberService;
+import kr.co.space.diary.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +26,7 @@ public class MemberServiceImpl implements MemberService {
 
   private final MemberMapper memberMapper;
   private final BCryptPasswordEncoder passwordEncoder;
+  private final JavaMailSender mailSender;
 
   @Override
   public List<Member> findAll(Member member) {
@@ -85,6 +90,19 @@ public class MemberServiceImpl implements MemberService {
     } else {
       throw new CustomException(CustomExceptionType.NOT_MATCH_PASSWORD);
     }
+  }
+
+  @Override
+  public void initPassword(Member member) throws CustomException, MessagingException {
+    // member 객체는 username, email 값만 가짐
+    Member findMember = memberMapper.findOne(Member.builder().username(member.getUsername()).email(member.getEmail()).build());
+    if(findMember == null) {
+      throw new CustomException(CustomExceptionType.NOT_MATCH_USERNAME_OR_EMAIL);
+    }
+    String temporaryPassword = CommonUtil.createTemporaryPassword();
+    CommonUtil.sendTemporaryPassword(mailSender,
+        Mail.builder().to(findMember.getEmail()).tempPassword(temporaryPassword).build());
+    memberMapper.modify(Member.builder().id(findMember.getId()).toChangePassword(passwordEncoder.encode(temporaryPassword)).build());
   }
 
   @Override

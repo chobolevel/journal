@@ -49,4 +49,9 @@ public class MemberController {
     return "/member/change-password";
   }
 
+  @GetMapping("init-password")
+  public String initPassword() {
+    return "/member/init-password";
+  }
+
 }
