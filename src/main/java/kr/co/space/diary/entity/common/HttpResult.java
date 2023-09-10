@@ -10,16 +10,16 @@ import org.springframework.http.HttpStatus;
 @Builder
 public class HttpResult {
 
-  private HttpStatus statusCode;
+  private int statusCode;
   private String statusText;
   private String message;
 
   public static HttpResult ok(String message) {
-    return HttpResult.builder().statusCode(HttpStatus.OK).statusText(HttpStatus.OK.getReasonPhrase()).message(message).build();
+    return HttpResult.builder().statusCode(HttpStatus.OK.value()).statusText(HttpStatus.OK.getReasonPhrase()).message(message).build();
   }
 
   public static HttpResult create(String message) {
-    return HttpResult.builder().statusCode(HttpStatus.CREATED).statusText(HttpStatus.CREATED.getReasonPhrase()).message(message).build();
+    return HttpResult.builder().statusCode(HttpStatus.CREATED.value()).statusText(HttpStatus.CREATED.getReasonPhrase()).message(message).build();
   }
 
 }
