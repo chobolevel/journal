@@ -1,20 +1,20 @@
 package kr.co.space.diary.controller.diary;
 
-import kr.co.space.diary.config.security.principal.PrincipalDetails;
+import kr.co.space.diary.entity.common.HttpResult;
 import kr.co.space.diary.entity.diary.Diaries;
 import kr.co.space.diary.entity.diary.Diary;
 import kr.co.space.diary.exception.CustomException;
 import kr.co.space.diary.service.diary.DiaryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -23,7 +23,6 @@ import java.util.List;
 public class DiaryRestController {
 
   private final DiaryService diaryService;
-  private final RedisTemplate<String, String> redisTemplate;
 
   @GetMapping("{id}")
   public ResponseEntity<?> fetch(@PathVariable("id") String id) throws CustomException {
@@ -41,7 +40,7 @@ public class DiaryRestController {
   @PostMapping("write")
   public ResponseEntity<?> write(@RequestPart("diary") Diary diary, @RequestPart(value = "uploadFiles", required = false) List<MultipartFile> uploadFiles) throws CustomException, IOException {
     diaryService.create(diary, uploadFiles);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    return new ResponseEntity<>(HttpResult.create("success to create diary"), HttpStatus.CREATED);
   }
 
   @PutMapping("{id}")
@@ -50,46 +49,39 @@ public class DiaryRestController {
                                   @RequestPart(value = "uploadFiles", required = false) List<MultipartFile> uploadFiles) throws CustomException {
     diary.setId(id);
     diaryService.modify(diary);
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.ok(HttpResult.ok("success to modify diary"));
   }
 
   @PutMapping("increase-view-cnt/{id}")
-  public ResponseEntity<?> increaseViewCnt(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("id") String id) throws CustomException {
-    String memberId = principalDetails.getMember().getId();
-    String viewedDiaryIds = redisTemplate.opsForValue().get(memberId);
-    List<String> viewedDiaryIdList = new ArrayList<>();
+  public ResponseEntity<?> increaseViewCnt(HttpServletResponse res,
+                                           @CookieValue(value = "viewedDiaryIds", required = false) String viewedDiaryIds,
+                                           @PathVariable("id") String id) throws CustomException {
     if(viewedDiaryIds == null) {
-      // 없을 땐 새롭게 key:value 생성 -> 조회수 상승
-      redisTemplate.opsForValue().set(memberId, id);
       diaryService.increaseViewCnt(Diary.builder().id(id).build());
-    }
-    else {
-      // null이 아니면서 조회한 아이디에 포함되는 경우 아닌 경우 구분
-      for(String s : viewedDiaryIds.split(", ")) {
-        viewedDiaryIdList.add(s);
-      }
-      if(viewedDiaryIdList.contains(id)) {
-        // 매칭되는 경우 -> 조회 수 상승 X
-      } else {
-        // 매칭되지 않는 경우
-        viewedDiaryIdList.add(1, id);
-        redisTemplate.opsForValue().set(memberId, String.join(", ", viewedDiaryIdList));
+      Cookie cookie = new Cookie("viewedDiaryIds", id);
+      res.addCookie(cookie);
+    } else {
+      List<String> viewedDiaryIdList = Arrays.asList(viewedDiaryIds.split("/"));
+      if(!viewedDiaryIdList.contains(id)) {
+        // 조회수 상승 및 쿠키에 아이디 저장
         diaryService.increaseViewCnt(Diary.builder().id(id).build());
+        Cookie cookie = new Cookie("viewedDiaryIds", viewedDiaryIds + "/" + id);
+        res.addCookie(cookie);
       }
     }
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.ok(HttpResult.ok("success to increase view count"));
   }
 
   @PutMapping("increase-like-cnt/{id}")
   public ResponseEntity<?> increaseLikeCnt(@PathVariable("id") String id) throws CustomException {
     diaryService.increaseLikeCnt(Diary.builder().id(id).build());
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.ok(HttpResult.ok("success to increase like count"));
   }
 
   @DeleteMapping("{id}")
   public ResponseEntity<?> remove(@PathVariable("id") String id) throws CustomException {
     diaryService.remove(Diary.builder().id(id).build());
-    return new ResponseEntity<>(HttpStatus.OK);
+    return ResponseEntity.ok(HttpResult.ok("success to delete diary"));
   }
 
 }
