@@ -51,6 +51,17 @@
         type: 'GET',
         contentType: 'application/json',
         success: (data) => {
+            $.ajax({
+                url: `http://localhost:8080/api/diary/increase-view-cnt/${diaryId}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                success: () => {
+                    console.log('success to increase')
+                },
+                error: () => {
+                    console.log('fail to increase')
+                }
+            })
             $titleInput.val(data.title)
             $contentTextarea.val(data.content)
             data.attachmentList.forEach((attachment) => {
