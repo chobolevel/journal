@@ -128,6 +128,7 @@ public class DiaryServiceImpl implements DiaryService {
     if(diary.getId() == null || diary.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
     }
+    attachmentMapper.deleteByDiaryId(diary);
     diaryMapper.remove(diary);
   }
 }
