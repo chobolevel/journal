@@ -18,7 +18,7 @@ public interface DiaryService {
 
   void create(Diary diary, List<MultipartFile> uploadFiles) throws CustomException, IOException;
 
-  void modify(Diary diary) throws CustomException;
+  void modify(Diary diary, List<MultipartFile> uploadFiles) throws CustomException, IOException;
 
   void increaseViewCnt(Diary diary) throws CustomException;
 

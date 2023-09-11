@@ -46,9 +46,9 @@ public class DiaryRestController {
   @PutMapping("{id}")
   public ResponseEntity<?> modify(@PathVariable("id") String id,
                                   @RequestPart("diary") Diary diary,
-                                  @RequestPart(value = "uploadFiles", required = false) List<MultipartFile> uploadFiles) throws CustomException {
+                                  @RequestPart(value = "uploadFiles", required = false) List<MultipartFile> uploadFiles) throws CustomException, IOException {
     diary.setId(id);
-    diaryService.modify(diary);
+    diaryService.modify(diary, uploadFiles);
     return ResponseEntity.ok(HttpResult.ok("success to modify diary"));
   }
 
