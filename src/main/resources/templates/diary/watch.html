@@ -19,7 +19,7 @@
             </div>
             <div class="upload-area">
                 <label for="uploadFiles">파일 첨부</label>
-                <input id="uploadFiles" multiple="multiple" name="uploadFile" type="file"/>
+                <input id="uploadFiles" multiple="multiple" name="uploadFiles" type="file"/>
                 <ul class="upload-file-names"></ul>
             </div>
             <div class="button-area">
@@ -40,7 +40,7 @@
     const $modifyForm = $('.modify-form')
     const $titleInput = $('input[name=title]')
     const $contentTextarea = $('textarea[name=content]')
-    const $uploadFiles = $('input[name=uplaodFiles]')
+    const $uploadFiles = $('input[name=uploadFiles]')
     const $uploadFileNames = $('.upload-file-names')
     const $submitBtn = $('.submit-btn')
     const $removeBtn = $('.remove-btn')
@@ -65,6 +65,7 @@
             $titleInput.val(data.title)
             $contentTextarea.val(data.content)
             data.attachmentList.forEach((attachment) => {
+
                 const $li = $(`<li><span>${attachment.fileName}</span></li>`)
                 $li.on('click', (e) => {
                     e.preventDefault()
@@ -88,6 +89,9 @@
             content: $contentTextarea.val()
         }
         formData.append('diary', new Blob([JSON.stringify(data)], { type: 'application/json' }))
+        Array.from($uploadFiles[0].files).forEach((file) => {
+            formData.append('uploadFiles', file)
+        })
         $.ajax({
             url: `http://localhost:8080/api/diary/${diaryId}`,
             type: 'PUT',
@@ -100,7 +104,7 @@
             success: (res) => {
                 alert('일기 수정 성공')
                 console.log(res)
-                location.href = `/diary/${diaryId}`
+                location.href = '/diary/list'
             },
             error: (request, status, error) => {
                 alert('일기 수정 실패')
