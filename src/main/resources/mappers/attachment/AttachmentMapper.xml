@@ -25,4 +25,8 @@
         </foreach>
     </insert>
 
+    <delete id="deleteByDiaryId" parameterType="Diary">
+        DELETE FROM attachment WHERE diary_id = #{id}
+    </delete>
+
 </mapper>

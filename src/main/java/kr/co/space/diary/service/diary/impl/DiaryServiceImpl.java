@@ -76,10 +76,34 @@ public class DiaryServiceImpl implements DiaryService {
   }
 
   @Override
-  public void modify(Diary diary) throws CustomException {
+  public void modify(Diary diary, List<MultipartFile> uploadFiles) throws CustomException, IOException {
     if(diary.getId() == null || diary.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
     }
+
+    if(uploadFiles != null) {
+      String diaryId = diary.getId();
+      List<Attachment> list = uploadFiles.stream().map((file) -> new Attachment(diaryId, file.getOriginalFilename())).toList();
+      File folder = new File(basePath + "\\" + diaryId);
+      if(folder.exists()) {
+        // 경로가 존재하는 경우 패키지 삭제하고 새롭게 생성
+        attachmentMapper.deleteByDiaryId(Diary.builder().id(diaryId).build());
+        File[] files = folder.listFiles();
+        for(File file : files) {
+          file.delete();
+        }
+        folder.delete();
+        folder.mkdir();
+      } else {
+        // 경로가 존재하지 않는 경우
+        folder.mkdir();
+      }
+      for(MultipartFile file : uploadFiles) {
+        file.transferTo(new File(String.format("%s\\%s", diaryId, file.getOriginalFilename())));
+      }
+      attachmentMapper.create(list);
+    }
+
     diaryMapper.modify(diary);
   }
 
@@ -104,6 +128,7 @@ public class DiaryServiceImpl implements DiaryService {
     if(diary.getId() == null || diary.getId().isEmpty()) {
       throw new CustomException(CustomExceptionType.MISSING_PARAMETER, "String", "id");
     }
+    attachmentMapper.deleteByDiaryId(diary);
     diaryMapper.remove(diary);
   }
 }
