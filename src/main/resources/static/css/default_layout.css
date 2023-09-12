@@ -128,8 +128,15 @@ section {
 .form-area form .upload-area label:hover {
     cursor: pointer;
 }
+.form-area form .upload-area .uploaded-file-area {
+    margin: 20px 0;
+}
+.form-area form .upload-area .uploaded-file-title {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
 .form-area form .upload-area .upload-file-names {
-    margin-top: 30px;
     padding: 0 20px;
 }
 .form-area form .upload-area .upload-file-names li {

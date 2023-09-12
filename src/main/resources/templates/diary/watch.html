@@ -18,9 +18,13 @@
                 <textarea name="content" placeholder="내용을 입력하세요.."></textarea>
             </div>
             <div class="upload-area">
-                <label for="uploadFiles">파일 첨부</label>
+                <label class="uploadFiles-label" for="uploadFiles">파일 첨부</label>
                 <input id="uploadFiles" multiple="multiple" name="uploadFiles" type="file"/>
-                <ul class="upload-file-names"></ul>
+                <div class="uploaded-file-area">
+                    <p class="uploaded-file-title">첨부 파일</p>
+                    <ul class="upload-file-names">
+                    </ul>
+                </div>
             </div>
             <div class="button-area">
                 <button class="submit-btn">저장하기</button>
@@ -36,10 +40,12 @@
 
 <script th:inline="javascript">
     const searchParams = new URLSearchParams(location.search)
+    const member = [[${#authentication.principal.member}]]
     const diaryId = searchParams.get('id')
     const $modifyForm = $('.modify-form')
     const $titleInput = $('input[name=title]')
     const $contentTextarea = $('textarea[name=content]')
+    const $uploadFilesLabel = $('.uploadFiles-label')
     const $uploadFiles = $('input[name=uploadFiles]')
     const $uploadFileNames = $('.upload-file-names')
     const $submitBtn = $('.submit-btn')
@@ -51,6 +57,16 @@
         type: 'GET',
         contentType: 'application/json',
         success: (data) => {
+            const isWriter = data.writerId === member.id
+            if(!isWriter) {
+                // 본인이 작성한 글이 아닌 경우 처리
+                $titleInput.prop('readonly', true)
+                $contentTextarea.prop('readonly', true)
+                $uploadFilesLabel.css('display', 'none')
+                $submitBtn.css('display', 'none')
+                $removeBtn.css('display', 'none')
+                $cancelBtn.css('display', 'none')
+            }
             $.ajax({
                 url: `http://localhost:8080/api/diary/increase-view-cnt/${diaryId}`,
                 type: 'PUT',
@@ -64,15 +80,18 @@
             })
             $titleInput.val(data.title)
             $contentTextarea.val(data.content)
-            data.attachmentList.forEach((attachment) => {
-
-                const $li = $(`<li><span>${attachment.fileName}</span></li>`)
-                $li.on('click', (e) => {
-                    e.preventDefault()
-                    location.href = `http://localhost:8080/api/attachment/${data.id}/${attachment.fileName}`
+            if(data.attachmentList.length > 0) {
+                data.attachmentList.forEach((attachment) => {
+                    const $li = $(`<li><span>${attachment.fileName}</span></li>`)
+                    $li.on('click', (e) => {
+                        e.preventDefault()
+                        location.href = `http://localhost:8080/api/attachment/${data.id}/${attachment.fileName}`
+                    })
+                    $uploadFileNames.append($li)
                 })
-                $uploadFileNames.append($li)
-            })
+            } else {
+                $('.uploaded-file-area').css('display', 'none')
+            }
         },
         error: () => {
             alert('해당 일기를 찾을 수 없습니다.')
