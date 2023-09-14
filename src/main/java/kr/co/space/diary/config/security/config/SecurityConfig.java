@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -17,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
   private final CustomAuthenticationFailureHandler authenticationFailureHandler;
+  private final UserDetailsService userDetailsService;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -49,6 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // true -> 인증 시도 세션 로그인 실패 처리
         // false -> 인증 시도 세션 로그인 성공 처리 및 기존 세션 만료
         .maxSessionsPreventsLogin(true);
+    http
+        .rememberMe()
+        .rememberMeParameter("remember")
+        .tokenValiditySeconds(60*60)
+        .alwaysRemember(false)
+        .userDetailsService(userDetailsService);
   }
 
   @Bean
