@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/member/init-password",
             "/api/member/sign/up",
             "/api/member/init-password").anonymous()
+        .antMatchers("/member/list","/api/member/list").hasRole("ADMIN")
         .antMatchers("/member/**", "/api/member/**").authenticated()
         .anyRequest().permitAll()
       .and()
