@@ -49,6 +49,9 @@ public class PrincipalDetails implements UserDetails {
 
   @Override
   public boolean isEnabled() {
+    if(member.getResignYn().equals("y")) {
+      return false;
+    }
     return true;
   }
 }
