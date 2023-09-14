@@ -15,8 +15,8 @@
             <tr>
                 <th>제 목</th>
                 <th>작성자</th>
+                <th>작성일자</th>
                 <th>조회수</th>
-                <th>좋아요</th>
             </tr>
             </thead>
             <tbody class="diary-list">
@@ -127,12 +127,17 @@
 
     const addTableRow = (data) => {
         data.diaryList.forEach((diary, index) => {
+            const date = new Date(diary.createDate)
+            const year = date.getFullYear()
+            const month = String(date.getMonth() + 1).padStart(2, '0')
+            const day = String(date.getDate()).padStart(2, '0')
+            const formatDate = `${year}-${month}-${day}`
             $diaryList.append(
                 `<tr>
                    <td><a href="/diary?id=${diary.id}">${diary.title}</a></td>
                    <td>${diary.writer.nickname}</td>
+                   <td>${formatDate}</td>
                    <td>${diary.viewCnt}</td>
-                   <td>${diary.likeCnt}</td>
                  </tr>`
             )
         })
