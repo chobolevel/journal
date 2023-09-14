@@ -2,6 +2,7 @@ package kr.co.space.diary.service.member.impl;
 
 import kr.co.space.diary.entity.common.Mail;
 import kr.co.space.diary.entity.member.Member;
+import kr.co.space.diary.entity.member.Members;
 import kr.co.space.diary.enums.common.CustomExceptionType;
 import kr.co.space.diary.enums.member.MemberResignType;
 import kr.co.space.diary.enums.member.MemberRoleType;
@@ -29,8 +30,13 @@ public class MemberServiceImpl implements MemberService {
   private final JavaMailSender mailSender;
 
   @Override
-  public List<Member> findAll(Member member) {
-    return memberMapper.findAll(member);
+  public int findCount() {
+    return memberMapper.findCount();
+  }
+
+  @Override
+  public List<Member> findAll(Members members) {
+    return memberMapper.findAll(members);
   }
 
   @Override

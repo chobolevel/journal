@@ -3,49 +3,47 @@
       layout:decorate="~{layout/default_layout.html}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title>나만의 일기 - 일기 목록</title>
+  <title>나만의 일기 - 회원 관리</title>
 </head>
 <body>
 
 <section layout:fragment="content">
-    <div class="diary-list-area">
-        <p class="diary-list-title">일기 목록</p>
-        <table class="diary-list-table">
-            <thead>
-            <tr>
-                <th>제 목</th>
-                <th>작성자</th>
-                <th>작성일자</th>
-                <th>조회수</th>
-            </tr>
-            </thead>
-            <tbody class="diary-list">
-            </tbody>
-        </table>
-        <div class="paging-area">
-            <div class="prev-btn"></div>
-            <ul class="paging-numbers">
-            </ul>
-            <div class="next-btn"></div>
-        </div>
-        <div class="button-area">
-            <button class="write-btn">글 쓰기</button>
-        </div>
+  <div class="member-list-area">
+    <p class="member-list-title">회원 목록</p>
+    <table class="member-list-table">
+      <thead>
+      <tr>
+        <th>이름</th>
+        <th>닉네임</th>
+        <th>이메일</th>
+        <th>활성화 상태</th>
+        <th>가입 일자</th>
+        <th>관리</th>
+      </tr>
+      </thead>
+      <tbody class="member-list">
+      </tbody>
+    </table>
+    <div class="paging-area">
+      <div class="prev-btn"></div>
+      <ul class="paging-numbers">
+      </ul>
+      <div class="next-btn"></div>
     </div>
+  </div>
 </section>
 
 </body>
 </html>
 
-<script th:inline="javascript">
-    const $writeBtn = $('.write-btn')
-    const $diaryList = $('.diary-list')
+<script>
+    const $memberList = $('.member-list')
     const $prevBtn = $('.prev-btn')
     const $nextBtn = $('.next-btn')
     const $pagingNumbers = $('.paging-numbers')
 
     $.ajax({
-        url: 'http://localhost:8080/api/diary/list?pageNum=1&limit=10',
+        url: 'http://localhost:8080/api/member/list?pageNum=1&limit=10',
         type: 'GET',
         contentType: 'application/json',
         success: (data) => {
@@ -55,7 +53,7 @@
                 $li.on('click', (e) => {
                     e.preventDefault()
                     $.ajax({
-                        url: `http://localhost:8080/api/diary/list?pageNum=${e.target.innerText}&limit=10`,
+                        url: `http://localhost:8080/api/member/list?pageNum=${e.target.innerText}&limit=10`,
                         type: 'GET',
                         contentType: 'application/json',
                         success: (data) => {
@@ -70,8 +68,8 @@
                 $pagingNumbers.append($li)
             }
         },
-        error: () => {
-            location.href = '/'
+        error: (request, status, error) => {
+            console.log('fail to load')
         }
     })
 
@@ -98,7 +96,7 @@
         $goNextBtn.on('click', (e) => {
             e.preventDefault()
             $.ajax({
-                url: `http://localhost:8080/api/diary/list?pageNum=${lastPageNum}&limit=10`,
+                url: `http://localhost:8080/api/member/list?pageNum=${lastPageNum}&limit=10`,
                 type: 'GET',
                 contentType: 'application/json',
                 success: (data) => {
@@ -126,25 +124,43 @@
     }
 
     const addTableRow = (data) => {
-        data.diaryList.forEach((diary, index) => {
-            const date = new Date(diary.createDate)
+        data.memberList.forEach((member) => {
+            const date = new Date(member.createDate)
             const year = date.getFullYear()
             const month = String(date.getMonth() + 1).padStart(2, '0')
             const day = String(date.getDate()).padStart(2, '0')
             const formatDate = `${year}-${month}-${day}`
-            $diaryList.append(
+            const $row = $(
                 `<tr>
-                   <td><a href="/diary?id=${diary.id}">${diary.title}</a></td>
-                   <td>${diary.writer.nickname}</td>
-                   <td>${formatDate}</td>
-                   <td>${diary.viewCnt}</td>
-                 </tr>`
+                      <td>${member.name}</td>
+                      <td>${member.nickname}</td>
+                      <td>${member.email}</td>
+                      <td>${member.resignYn === 'n' ? '활성화 상태' : '비활성화 상태'}</td>
+                      <td>${formatDate}</td>
+                  </tr>`
             )
+            const $resignBtn = $(
+                `<td>
+                  <button>${member.resignYn === 'n' ? '비활성화' : '활성화'}</button>
+                </td>`
+            )
+            $resignBtn.on('click', (e) => {
+                e.preventDefault()
+                $.ajax({
+                    url: `http://localhost:8080/api/member/${member.id}`,
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    success: () => {
+                        alert('비활성화 처리 완료')
+                        location.href = '/member/list'
+                    },
+                    error: () => {
+                        console.log('fail to resign member')
+                    }
+                })
+            })
+            $row.append($resignBtn)
+            $memberList.append($row)
         })
     }
-
-    $writeBtn.on('click', (e) => {
-        e.preventDefault()
-        location.href = '/diary/write'
-    })
 </script>
