@@ -3,6 +3,7 @@ package kr.co.space.diary.controller.member;
 import kr.co.space.diary.config.security.principal.PrincipalDetails;
 import kr.co.space.diary.entity.common.HttpResult;
 import kr.co.space.diary.entity.member.Member;
+import kr.co.space.diary.entity.member.Members;
 import kr.co.space.diary.enums.common.CustomExceptionType;
 import kr.co.space.diary.exception.CustomException;
 import kr.co.space.diary.service.member.MemberService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/member")
@@ -45,8 +47,11 @@ public class MemberRestController {
   }
 
   @GetMapping("list")
-  public ResponseEntity<?> list() throws CustomException {
-    return new ResponseEntity<>(memberService.findAll(Member.builder().build()), HttpStatus.OK);
+  public ResponseEntity<?> list(Members members) throws CustomException {
+    List<Member> memberList = memberService.findAll(members);
+    members.setMemberList(memberList);
+    members.setTotalCnt(memberService.findCount());
+    return new ResponseEntity<>(members, HttpStatus.OK);
   }
 
   @PostMapping("/sign/up")

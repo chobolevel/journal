@@ -28,13 +28,18 @@
         , ${alias}update_date AS ${prefix}update_date
     </sql>
 
-    <select id="findAll" parameterType="Member" resultMap="BaseResultMap">
+    <select id="findCount" resultType="int">
+        SELECT COUNT(*) FROM member
+    </select>
+
+    <select id="findAll" parameterType="Members" resultMap="BaseResultMap">
         SELECT
         <include refid="columns">
             <property name="alias" value=""/>
             <property name="prefix" value=""/>
         </include>
         FROM member
+        LIMIT #{offset}, #{limit}
     </select>
 
     <select id="findOne" parameterType="Member" resultMap="BaseResultMap">

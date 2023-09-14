@@ -1,7 +1,5 @@
 package kr.co.space.diary.controller.member;
 
-import kr.co.space.diary.service.member.MemberService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("member")
-@RequiredArgsConstructor
 public class MemberController {
-
-  private final MemberService memberService;
 
   @GetMapping("/sign/in")
   public String signIn(@RequestParam(required = false) boolean error,
@@ -52,6 +47,11 @@ public class MemberController {
   @GetMapping("init-password")
   public String initPassword() {
     return "/member/init-password";
+  }
+
+  @GetMapping("list")
+  public String manageMember() {
+    return "/member/list";
   }
 
 }
