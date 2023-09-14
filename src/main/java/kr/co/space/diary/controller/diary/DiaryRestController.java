@@ -59,6 +59,7 @@ public class DiaryRestController {
     if(viewedDiaryIds == null) {
       diaryService.increaseViewCnt(Diary.builder().id(id).build());
       Cookie cookie = new Cookie("viewedDiaryIds", id);
+      cookie.setMaxAge(60*60*24);
       res.addCookie(cookie);
     } else {
       List<String> viewedDiaryIdList = Arrays.asList(viewedDiaryIds.split("/"));
@@ -66,6 +67,7 @@ public class DiaryRestController {
         // 조회수 상승 및 쿠키에 아이디 저장
         diaryService.increaseViewCnt(Diary.builder().id(id).build());
         Cookie cookie = new Cookie("viewedDiaryIds", viewedDiaryIds + "/" + id);
+        cookie.setMaxAge(60*60*24);
         res.addCookie(cookie);
       }
     }
